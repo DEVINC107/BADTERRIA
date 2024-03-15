@@ -1,6 +1,6 @@
 package com.mygdx.game;
 
-import Block.Block;
+import com.mygdx.game.Block.Block;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
@@ -29,5 +29,9 @@ public class BlockTracker {
 
     public static void addBlockToPosition(Block block, Vector2 position) {
         blockPositions.put(block, position);
+    }
+
+    public static HashMap<Block, Vector2> getAllBlockPositions() {
+        return blockPositions;
     }
 }

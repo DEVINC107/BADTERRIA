@@ -1,21 +1,20 @@
 package com.mygdx.game;
 
+import com.mygdx.game.Block.Block;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.sun.org.apache.bcel.internal.classfile.Utility;
+import com.mygdx.game.Block.DefaultBlock;
+
+import java.util.HashMap;
 
 
 public class Game extends ApplicationAdapter {
@@ -26,12 +25,16 @@ public class Game extends ApplicationAdapter {
 	Body player;
 	Sprite playerSprite;
 	Texture img;
+	HashMap<String, Texture> blockTextures;
 
 
 
 	@Override
 	public void create () {
-		img = new Texture("player.png");
+		img = new Texture("Images/player.png");
+		blockTextures = new HashMap<>();
+		blockTextures.put("Grass", new Texture("Images/Blocks/grass.png"));
+		new DefaultBlock("Grass", new Vector2(0, 2));
 		playerSprite = new Sprite(img);
 		batch = new SpriteBatch();
 		world = new World(new Vector2(0, -2), true);
@@ -105,6 +108,12 @@ public class Game extends ApplicationAdapter {
 		}
 		ScreenUtils.clear(1, 0, 0, 1);
 		batch.begin();
+		Vector2 playerPos = this.player.getPosition();
+		for (HashMap.Entry<Block, Vector2> entry : BlockTracker.getAllBlockPositions().entrySet()) {
+			Block currentBlock = entry.getKey();
+			Vector2 currentPos = entry.getValue();
+			batch.draw(blockTextures.get(currentBlock.getName()), currentPos.x - playerPos.x * 100 + camera.viewportWidth / 2, currentPos.y - playerPos.y * 100 + camera.viewportHeight / 200);
+		}
 		batch.end();
 		world.step(1/60f, 6, 2);
 		camera.position.x = player.getPosition().x;

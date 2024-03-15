@@ -1,4 +1,4 @@
-package Block;
+package com.mygdx.game.Block;
 
 import com.badlogic.gdx.math.Vector2;
 
