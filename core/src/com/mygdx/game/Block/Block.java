@@ -14,6 +14,10 @@ public class Block {
         BlockTracker.addBlockToPosition(this, position);
     }
 
+    public void takeDamage(int damage) {
+        health -= damage;
+    }
+
     public int getHealth() {
         return health;
     }
