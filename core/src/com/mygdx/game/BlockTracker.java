@@ -27,8 +27,12 @@ public class BlockTracker {
         return blocksAtPos;
     }
 
-    public static void addBlockToPosition(Block block, Vector2 position) {
+    public static void addBlock(Block block, Vector2 position) {
         blockPositions.put(block, position);
+    }
+
+    public static void removeBlock(Block block) {
+        blockPositions.remove(block);
     }
 
     public static HashMap<Block, Vector2> getAllBlockPositions() {
