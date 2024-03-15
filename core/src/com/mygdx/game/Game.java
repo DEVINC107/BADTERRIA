@@ -28,7 +28,7 @@ public class Game extends ApplicationAdapter {
 	Texture img;
 
 
-	
+
 	@Override
 	public void create () {
 		img = new Texture("player.png");
@@ -51,7 +51,7 @@ public class Game extends ApplicationAdapter {
 		player = body;
 // Create a circle shape and set its radius to 6
 		PolygonShape box = new PolygonShape();
-		box.setAsBox(playerSprite.getWidth()/2,playerSprite.getHeight()/2);
+		box.setAsBox(playerSprite.getWidth()/100,playerSprite.getHeight()/100);
 
 
 // Create a fixture definition to apply our shape to
@@ -90,15 +90,15 @@ public class Game extends ApplicationAdapter {
 
 		Vector2 vel = this.player.getLinearVelocity();
 		Vector2 pos = this.player.getPosition();
-		int MAX_VELOCITY = 1;
+		int MAX_VELOCITY = 5;
 // apply left impulse, but only if max velocity is not reached yet
 		if (Gdx.input.isKeyPressed(Input.Keys.A) && vel.x > -MAX_VELOCITY) {
-			this.player.applyLinearImpulse(-0.8f, 0, pos.x, pos.y, true);
+			this.player.applyLinearImpulse(-1f, 0, pos.x, pos.y, true);
 		}
 
 // apply right impulse, but only if max velocity is not reached yet
 		if (Gdx.input.isKeyPressed(Input.Keys.D) && vel.x < MAX_VELOCITY) {
-			this.player.applyLinearImpulse(0.80f, 0, pos.x, pos.y, true);
+			this.player.applyLinearImpulse(1f, 0, pos.x, pos.y, true);
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && vel.y < MAX_VELOCITY) {
 			this.player.applyLinearImpulse(0, 0.8f, pos.x, pos.y, true);
@@ -111,17 +111,18 @@ public class Game extends ApplicationAdapter {
 		camera.position.y = player.getPosition().y;
 		camera.position.z = 0;
 		camera.update();
-		playerSprite.setPosition(player.getPosition().x, player.getPosition().y);
+		//playerSprite.setPosition(player.getPosition().x, player.getPosition().y);
 
 		// You know the rest...
+		playerSprite.setPosition(player.getPosition().x/100,player.getPosition().y/100);
 		batch.begin();
-		batch.draw(playerSprite, playerSprite.getX(), playerSprite.getY());
+
 		batch.end();
 		debugRenderer.render(world, camera.combined);
 
 
 	}
-	
+
 	@Override
 	public void dispose () {
 		batch.dispose();
