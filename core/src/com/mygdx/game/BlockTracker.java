@@ -9,6 +9,14 @@ import java.util.HashMap;
 public class BlockTracker {
     private static HashMap<Block, Vector2> blockPositions = new HashMap<>();
 
+    public static void addBlock(Block block, Vector2 position) {
+        blockPositions.put(block, position);
+    }
+
+    public static void removeBlock(Block block) {
+        blockPositions.remove(block);
+    }
+
     public static Vector2 getBlockPosition(Block block) {
         return blockPositions.get(block);
     }
@@ -25,14 +33,6 @@ public class BlockTracker {
         }
 
         return blocksAtPos;
-    }
-
-    public static void addBlock(Block block, Vector2 position) {
-        blockPositions.put(block, position);
-    }
-
-    public static void removeBlock(Block block) {
-        blockPositions.remove(block);
     }
 
     public static HashMap<Block, Vector2> getAllBlockPositions() {
