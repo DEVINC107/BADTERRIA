@@ -11,7 +11,7 @@ public class Block {
     public Block(String name, Vector2 position) {
         this.name = name;
         this.health = TUtility.getInitialBlockHealth(name);
-        BlockTracker.addBlockToPosition(this, position);
+        BlockTracker.addBlock(this, position);
     }
 
     public void takeDamage(int damage) {
