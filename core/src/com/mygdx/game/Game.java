@@ -34,13 +34,16 @@ public class Game extends ApplicationAdapter {
 		img = new Texture("Images/player.png");
 		blockTextures = new HashMap<>();
 		blockTextures.put("Grass", new Texture("Images/Blocks/grass.png"));
-		new DefaultBlock("Grass", new Vector2(0, 2));
+		new DefaultBlock("Grass", new Vector2(0, 0));
+		new DefaultBlock("Grass", new Vector2(0, 1));
+		new DefaultBlock("Grass", new Vector2(1, 0));
+		new DefaultBlock("Grass", new Vector2(1, 1));
 		playerSprite = new Sprite(img);
 		batch = new SpriteBatch();
 		world = new World(new Vector2(0, -2), true);
 		debugRenderer = new Box2DDebugRenderer();
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, 10,10);
+		camera.setToOrtho(false, (float) 6.4,(float) 4.8);
 		System.out.println(camera.position);
 		// First we create a body definition
 		BodyDef bodyDef = new BodyDef();
@@ -54,7 +57,7 @@ public class Game extends ApplicationAdapter {
 		player = body;
 // Create a circle shape and set its radius to 6
 		PolygonShape box = new PolygonShape();
-		box.setAsBox(playerSprite.getWidth()/100,playerSprite.getHeight()/100);
+		box.setAsBox(playerSprite.getWidth()/300,playerSprite.getHeight()/300);
 
 
 // Create a fixture definition to apply our shape to
@@ -81,7 +84,7 @@ public class Game extends ApplicationAdapter {
 		PolygonShape groundBox = new PolygonShape();
 // Set the polygon shape as a box which is twice the size of our view port and 20 high
 // (setAsBox takes half-width and half-height as arguments)
-		groundBox.setAsBox(100, 0.2f);
+		groundBox.setAsBox(2, 0.2f);
 // Create a fixture from our polygon shape and add it to our ground body
 		groundBody.createFixture(groundBox, 0.0f);
 // Clean up after ourselves
@@ -108,11 +111,12 @@ public class Game extends ApplicationAdapter {
 		}
 		ScreenUtils.clear(1, 0, 0, 1);
 		batch.begin();
-		Vector2 playerPos = this.player.getPosition();
+		// renders blocks
+		Vector2 playerPos = player.getPosition();
 		for (HashMap.Entry<Block, Vector2> entry : BlockTracker.getAllBlockPositions().entrySet()) {
 			Block currentBlock = entry.getKey();
 			Vector2 currentPos = entry.getValue();
-			batch.draw(blockTextures.get(currentBlock.getName()), currentPos.x - playerPos.x * 100 + camera.viewportWidth / 2, currentPos.y - playerPos.y * 100 + camera.viewportHeight / 200);
+			batch.draw(blockTextures.get(currentBlock.getName()), (currentPos.x - playerPos.x) * 100 + 200, (currentPos.y - playerPos.y) * 100 + 200);
 		}
 		batch.end();
 		world.step(1/60f, 6, 2);
