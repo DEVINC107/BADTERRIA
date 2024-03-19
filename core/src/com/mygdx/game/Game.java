@@ -26,11 +26,21 @@ public class Game extends ApplicationAdapter {
 	Sprite playerSprite;
 	Texture img;
 	HashMap<String, Texture> blockTextures;
-	double BLOCKS_HORIZONTAL_AXIS = 12;
-	double BLOCKS_VERTICAL_AXIS = 10;
+	double BLOCKS_HORIZONTAL_AXIS = 26;
+	double BLOCKS_VERTICAL_AXIS = 20;
 	double PPM = 100;
 
-
+	public void drawSprite(Sprite sprite, double x, double y) {
+		Vector2 playerPos = player.getPosition();
+		float xScale = (float)(BLOCKS_HORIZONTAL_AXIS/(Gdx.graphics.getWidth()/PPM));
+		float yScale = (float)(BLOCKS_VERTICAL_AXIS/(Gdx.graphics.getHeight()/PPM));
+		double xSize = sprite.getWidth()/xScale;
+		double ySize = sprite.getHeight()/yScale;
+		double xPos = (x - playerPos.x) * (PPM/xScale) + Gdx.graphics.getWidth() / 2 - xSize / 2;
+		double yPos = (y - playerPos.y) * (PPM/yScale) + Gdx.graphics.getHeight() / 2 - ySize / 2;
+		System.out.println(xSize + " " + ySize);
+		batch.draw(sprite, (float) xPos, (float) yPos, (float) xSize, (float) ySize);
+	}
 
 	@Override
 	public void create () {
@@ -127,6 +137,8 @@ public class Game extends ApplicationAdapter {
 		camera.update();
 		//playerSprite.setPosition(player.getPosition().x, player.getPosition().y);
 
+		float xScale = (float)(BLOCKS_HORIZONTAL_AXIS/(Gdx.graphics.getWidth()/PPM));
+		float yScale = (float)(BLOCKS_VERTICAL_AXIS/(Gdx.graphics.getHeight()/PPM));
 		batch.begin();
 		// renders blocks
 		Vector2 playerPos = player.getPosition();
@@ -134,8 +146,6 @@ public class Game extends ApplicationAdapter {
 			Block currentBlock = entry.getKey();
 			Vector2 currentPos = entry.getValue();
 			Texture currentTexture = blockTextures.get(currentBlock.getName());
-			double xScale = (BLOCKS_HORIZONTAL_AXIS/(Gdx.graphics.getWidth()/PPM));
-			double yScale = (BLOCKS_VERTICAL_AXIS/(Gdx.graphics.getHeight()/PPM));
 
 			double xSize = currentTexture.getWidth()/xScale;
 			double ySize = currentTexture.getHeight()/yScale;
@@ -147,7 +157,7 @@ public class Game extends ApplicationAdapter {
 		batch.end();
 		// You know the rest...
 		batch.begin();
-		batch.draw(playerSprite, Gdx.graphics.getWidth() / 2 - playerSprite.getWidth() / 2, Gdx.graphics.getHeight() / 2 - playerSprite.getHeight() / 2);
+		drawSprite(playerSprite,playerPos.x,playerPos.y);
 		batch.end();
 		debugRenderer.render(world, camera.combined);
 
