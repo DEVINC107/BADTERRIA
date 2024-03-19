@@ -116,6 +116,13 @@ public class Game extends ApplicationAdapter {
 			this.player.applyLinearImpulse(0, 0.8f, pos.x, pos.y, true);
 		}
 		ScreenUtils.clear(1, 0, 0, 1);
+		world.step(1/60f, 6, 2);
+		camera.position.x = player.getPosition().x;
+		camera.position.y = player.getPosition().y;
+		camera.position.z = 0;
+		camera.update();
+		//playerSprite.setPosition(player.getPosition().x, player.getPosition().y);
+
 		batch.begin();
 		// renders blocks
 		Vector2 playerPos = player.getPosition();
@@ -126,13 +133,6 @@ public class Game extends ApplicationAdapter {
 			batch.draw(currentTexture, (currentPos.x - playerPos.x) * 100 + Gdx.graphics.getWidth() / 2 - currentTexture.getWidth() / 2, (currentPos.y - playerPos.y) * 100 + Gdx.graphics.getHeight() / 2 - currentTexture.getHeight() / 2);
 		}
 		batch.end();
-		world.step(1/60f, 6, 2);
-		camera.position.x = player.getPosition().x;
-		camera.position.y = player.getPosition().y;
-		camera.position.z = 0;
-		camera.update();
-		//playerSprite.setPosition(player.getPosition().x, player.getPosition().y);
-
 		// You know the rest...
 		playerSprite.setPosition(player.getPosition().x/100,player.getPosition().y/100);
 		batch.begin();
