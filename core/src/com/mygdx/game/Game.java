@@ -26,6 +26,8 @@ public class Game extends ApplicationAdapter {
 	Sprite playerSprite;
 	Texture img;
 	HashMap<String, Texture> blockTextures;
+	int BLOCKS_HORIZONTAL_AXIS = 12;
+	int BLOCKS_VERTICAL_AXIS = 10;
 
 
 
@@ -60,7 +62,7 @@ public class Game extends ApplicationAdapter {
 		fixtureDef.shape = box;
 		fixtureDef.density = 0f;
 		fixtureDef.friction = 0f;
-		fixtureDef.restitution = 0.6f; // Make it bounce a little bit
+		fixtureDef.restitution = 0f; // Make it bounce a little bit
 
 // Create our fixture and attach it to the body
 		Fixture fixture = body.createFixture(fixtureDef);
@@ -102,18 +104,19 @@ public class Game extends ApplicationAdapter {
 
 		Vector2 vel = this.player.getLinearVelocity();
 		Vector2 pos = this.player.getPosition();
-		int MAX_VELOCITY = 5;
+		float MAX_VELOCITY = 2.3f;
+		float MAX_JUMP_VEL = 4.5f;
 // apply left impulse, but only if max velocity is not reached yet
 		if (Gdx.input.isKeyPressed(Input.Keys.A) && vel.x > -MAX_VELOCITY) {
-			this.player.applyLinearImpulse(-1f, 0, pos.x, pos.y, true);
+			this.player.applyLinearImpulse(-1.1f, 0, pos.x, pos.y, true);
 		}
 
 // apply right impulse, but only if max velocity is not reached yet
 		if (Gdx.input.isKeyPressed(Input.Keys.D) && vel.x < MAX_VELOCITY) {
-			this.player.applyLinearImpulse(1f, 0, pos.x, pos.y, true);
+			this.player.applyLinearImpulse(1.1f, 0, pos.x, pos.y, true);
 		}
-		if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && vel.y < MAX_VELOCITY) {
-			this.player.applyLinearImpulse(0, 0.8f, pos.x, pos.y, true);
+		if (Gdx.input.isKeyPressed(Input.Keys.W) && vel.y < MAX_JUMP_VEL) {
+			this.player.applyLinearImpulse(0, 2.2f, pos.x, pos.y, true);
 		}
 		ScreenUtils.clear(1, 0, 0, 1);
 		world.step(1/60f, 6, 2);
@@ -134,9 +137,8 @@ public class Game extends ApplicationAdapter {
 		}
 		batch.end();
 		// You know the rest...
-		playerSprite.setPosition(player.getPosition().x/100,player.getPosition().y/100);
 		batch.begin();
-
+		batch.draw(playerSprite, Gdx.graphics.getWidth() / 2 - playerSprite.getWidth() / 2, Gdx.graphics.getHeight() / 2 - playerSprite.getHeight() / 2);
 		batch.end();
 		debugRenderer.render(world, camera.combined);
 
