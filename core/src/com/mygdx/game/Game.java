@@ -32,15 +32,10 @@ public class Game extends ApplicationAdapter {
 	@Override
 	public void create () {
 		img = new Texture("Images/player.png");
-		blockTextures = new HashMap<>();
-		blockTextures.put("Grass", new Texture("Images/Blocks/grass.png"));
-		new DefaultBlock("Grass", new Vector2(0, 0));
-		new DefaultBlock("Grass", new Vector2(0, 1));
-		new DefaultBlock("Grass", new Vector2(1, 0));
-		new DefaultBlock("Grass", new Vector2(1, 1));
 		playerSprite = new Sprite(img);
 		batch = new SpriteBatch();
-		world = new World(new Vector2(0, -2), true);
+		world = new World(new Vector2(0, -5), true);
+		BlockTracker.setWorld(world);
 		debugRenderer = new Box2DDebugRenderer();
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, (float) 6.4,(float) 4.8);
@@ -57,7 +52,7 @@ public class Game extends ApplicationAdapter {
 		player = body;
 // Create a circle shape and set its radius to 6
 		PolygonShape box = new PolygonShape();
-		box.setAsBox(playerSprite.getWidth()/300,playerSprite.getHeight()/300);
+		box.setAsBox((float) 0.5, 1);
 
 
 // Create a fixture definition to apply our shape to
@@ -89,6 +84,17 @@ public class Game extends ApplicationAdapter {
 		groundBody.createFixture(groundBox, 0.0f);
 // Clean up after ourselves
 		groundBox.dispose();
+
+
+		// creates blocks
+		blockTextures = new HashMap<>();
+		blockTextures.put("Grass", new Texture("Images/Blocks/grass.png"));
+		new DefaultBlock("Grass", new Vector2(0, 0));
+		new DefaultBlock("Grass", new Vector2(0, 1));
+		new DefaultBlock("Grass", new Vector2(1, 0));
+		new DefaultBlock("Grass", new Vector2(1, 1));
+		new DefaultBlock("Grass", new Vector2(2, 0));
+		new DefaultBlock("Grass", new Vector2(3, 0));
 	}
 
 	@Override
@@ -116,7 +122,8 @@ public class Game extends ApplicationAdapter {
 		for (HashMap.Entry<Block, Vector2> entry : BlockTracker.getAllBlockPositions().entrySet()) {
 			Block currentBlock = entry.getKey();
 			Vector2 currentPos = entry.getValue();
-			batch.draw(blockTextures.get(currentBlock.getName()), (currentPos.x - playerPos.x) * 100 + 200, (currentPos.y - playerPos.y) * 100 + 200);
+			Texture currentTexture = blockTextures.get(currentBlock.getName());
+			batch.draw(currentTexture, (currentPos.x - playerPos.x) * 100 + Gdx.graphics.getWidth() / 2 - currentTexture.getWidth() / 2, (currentPos.y - playerPos.y) * 100 + Gdx.graphics.getHeight() / 2 - currentTexture.getHeight() / 2);
 		}
 		batch.end();
 		world.step(1/60f, 6, 2);
