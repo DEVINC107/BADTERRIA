@@ -22,21 +22,13 @@ public class Block {
         health -= damage;
     }
     public void setCollision(Vector2 position, World world) {
+        // creates collisions somehow idk
         BodyDef groundBodyDef = new BodyDef();
-// Set its world position
         groundBodyDef.position.set(position);
-
-// Create a body from the definition and add it to the world
         Body groundBody = world.createBody(groundBodyDef);
-
-// Create a polygon shape
         PolygonShape groundBox = new PolygonShape();
-// Set the polygon shape as a box which is twice the size of our view port and 20 high
-// (setAsBox takes half-width and half-height as arguments)
         groundBox.setAsBox((float) 0.5, (float) 0.5);
-// Create a fixture from our polygon shape and add it to our ground body
         groundBody.createFixture(groundBox, 0);
-// Clean up after ourselves
         groundBox.dispose();
     }
 

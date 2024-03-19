@@ -58,7 +58,7 @@ public class Game extends ApplicationAdapter {
 // We set our body to dynamic, for something like ground which doesn't move we would set it to StaticBody
 		bodyDef.type = BodyDef.BodyType.DynamicBody;
 // Set our body's starting position in the world
-		bodyDef.position.set(0, 5);
+		bodyDef.position.set(0, 10);
 
 // Create our body in the world using our body definition
 		Body body = world.createBody(bodyDef);
@@ -81,33 +81,15 @@ public class Game extends ApplicationAdapter {
 // Remember to dispose of any shapes after you're done with them!
 // BodyDef and FixtureDef don't need disposing, but shapes do.
 		box.dispose();
-		BodyDef groundBodyDef = new BodyDef();
-// Set its world position
-		groundBodyDef.position.set(new Vector2(0, -1));
 
-// Create a body from the definition and add it to the world
-		Body groundBody = world.createBody(groundBodyDef);
-
-// Create a polygon shape
-		PolygonShape groundBox = new PolygonShape();
-// Set the polygon shape as a box which is twice the size of our view port and 20 high
-// (setAsBox takes half-width and half-height as arguments)
-		groundBox.setAsBox(2, 0.2f);
-// Create a fixture from our polygon shape and add it to our ground body
-		groundBody.createFixture(groundBox, 0.0f);
-// Clean up after ourselves
-		groundBox.dispose();
-
-
-		// creates blocks
+		// add block textures
 		blockTextures = new HashMap<>();
 		blockTextures.put("Grass", new Texture("Images/Blocks/grass.png"));
-		new DefaultBlock("Grass", new Vector2(0, 0));
-		new DefaultBlock("Grass", new Vector2(0, 1));
-		new DefaultBlock("Grass", new Vector2(1, 0));
-		new DefaultBlock("Grass", new Vector2(1, 1));
-		new DefaultBlock("Grass", new Vector2(2, 0));
-		new DefaultBlock("Grass", new Vector2(3, 0));
+		blockTextures.put("Dirt", new Texture("Images/Blocks/dirt.png"));
+		blockTextures.put("Stone", new Texture("Images/Blocks/stone.png"));
+
+		// creates blocks
+		TerrainGenerator.generateTerrain();
 	}
 
 	@Override
