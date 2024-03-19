@@ -26,8 +26,9 @@ public class Game extends ApplicationAdapter {
 	Sprite playerSprite;
 	Texture img;
 	HashMap<String, Texture> blockTextures;
-	int BLOCKS_HORIZONTAL_AXIS = 12;
-	int BLOCKS_VERTICAL_AXIS = 10;
+	double BLOCKS_HORIZONTAL_AXIS = 12;
+	double BLOCKS_VERTICAL_AXIS = 10;
+	double PPM = 100;
 
 
 
@@ -40,7 +41,7 @@ public class Game extends ApplicationAdapter {
 		BlockTracker.setWorld(world);
 		debugRenderer = new Box2DDebugRenderer();
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, (float) 6.4,(float) 4.8);
+		camera.setToOrtho(false, (float) BLOCKS_HORIZONTAL_AXIS,(float) BLOCKS_VERTICAL_AXIS);
 		System.out.println(camera.position);
 		// First we create a body definition
 		BodyDef bodyDef = new BodyDef();
@@ -133,7 +134,15 @@ public class Game extends ApplicationAdapter {
 			Block currentBlock = entry.getKey();
 			Vector2 currentPos = entry.getValue();
 			Texture currentTexture = blockTextures.get(currentBlock.getName());
-			batch.draw(currentTexture, (currentPos.x - playerPos.x) * 100 + Gdx.graphics.getWidth() / 2 - currentTexture.getWidth() / 2, (currentPos.y - playerPos.y) * 100 + Gdx.graphics.getHeight() / 2 - currentTexture.getHeight() / 2);
+			double xScale = (BLOCKS_HORIZONTAL_AXIS/(Gdx.graphics.getWidth()/PPM));
+			double yScale = (BLOCKS_VERTICAL_AXIS/(Gdx.graphics.getHeight()/PPM));
+
+			double xSize = currentTexture.getWidth()/xScale;
+			double ySize = currentTexture.getHeight()/yScale;
+			double xPos = (currentPos.x - playerPos.x) * (PPM/xScale) + Gdx.graphics.getWidth() / 2 - xSize / 2;
+			double yPos = (currentPos.y - playerPos.y) * (PPM/yScale) + Gdx.graphics.getHeight() / 2 - ySize / 2;
+			System.out.println(xSize + " " + ySize);
+			batch.draw(currentTexture, (float) xPos, (float) yPos, (float) xSize, (float) ySize);
 		}
 		batch.end();
 		// You know the rest...
