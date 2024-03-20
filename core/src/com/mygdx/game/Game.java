@@ -29,6 +29,7 @@ public class Game extends ApplicationAdapter {
 	double BLOCKS_HORIZONTAL_AXIS = 26;
 	double BLOCKS_VERTICAL_AXIS = 20;
 	double PPM = 100;
+	boolean reachedMaxJumpVel = false;
 
 	public void drawSprite(Sprite sprite, double x, double y) {
 		Vector2 playerPos = player.getPosition();
@@ -47,7 +48,7 @@ public class Game extends ApplicationAdapter {
 		img = new Texture("Images/player.png");
 		playerSprite = new Sprite(img);
 		batch = new SpriteBatch();
-		world = new World(new Vector2(0, -5), true);
+		world = new World(new Vector2(0, -10), true);
 		BlockTracker.setWorld(world);
 		debugRenderer = new Box2DDebugRenderer();
 		camera = new OrthographicCamera();
@@ -97,8 +98,8 @@ public class Game extends ApplicationAdapter {
 
 		Vector2 vel = this.player.getLinearVelocity();
 		Vector2 pos = this.player.getPosition();
-		float MAX_VELOCITY = 2.3f;
-		float MAX_JUMP_VEL = 4.5f;
+		float MAX_VELOCITY = 3.5f;
+		float MAX_JUMP_VEL = 5f;
 // apply left impulse, but only if max velocity is not reached yet
 		if (Gdx.input.isKeyPressed(Input.Keys.A) && vel.x > -MAX_VELOCITY) {
 			this.player.applyLinearImpulse(-1.1f, 0, pos.x, pos.y, true);
@@ -108,8 +109,21 @@ public class Game extends ApplicationAdapter {
 		if (Gdx.input.isKeyPressed(Input.Keys.D) && vel.x < MAX_VELOCITY) {
 			this.player.applyLinearImpulse(1.1f, 0, pos.x, pos.y, true);
 		}
-		if (Gdx.input.isKeyPressed(Input.Keys.W) && vel.y < MAX_JUMP_VEL) {
-			this.player.applyLinearImpulse(0, 2.2f, pos.x, pos.y, true);
+		if (Math.abs(player.getLinearVelocity().x) > 0) {
+			player.applyLinearImpulse(-player.getLinearVelocity().x/10,0f,pos.x,pos.y,true);
+		}
+		if (reachedMaxJumpVel) {
+			if (player.getLinearVelocity().y == 0) {
+				reachedMaxJumpVel = false;
+			}
+		}
+		if (player.getLinearVelocity().y >= MAX_JUMP_VEL) {
+			reachedMaxJumpVel = true;
+		}
+		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+			if (!reachedMaxJumpVel && player.getLinearVelocity().y >= 0) {
+				this.player.applyLinearImpulse(0, 1.1f, pos.x, pos.y, true);
+			}
 		}
 		ScreenUtils.clear(1, 0, 0, 1);
 		world.step(1/60f, 6, 2);
@@ -118,11 +132,10 @@ public class Game extends ApplicationAdapter {
 		camera.position.z = 0;
 		camera.update();
 		//playerSprite.setPosition(player.getPosition().x, player.getPosition().y);
-
-		float xScale = (float)(BLOCKS_HORIZONTAL_AXIS/(Gdx.graphics.getWidth()/PPM));
-		float yScale = (float)(BLOCKS_VERTICAL_AXIS/(Gdx.graphics.getHeight()/PPM));
 		batch.begin();
 		// renders blocks
+		float xScale = (float)(BLOCKS_HORIZONTAL_AXIS/(Gdx.graphics.getWidth()/PPM));
+		float yScale = (float)(BLOCKS_VERTICAL_AXIS/(Gdx.graphics.getHeight()/PPM));
 		Vector2 playerPos = player.getPosition();
 		for (HashMap.Entry<Block, Vector2> entry : BlockTracker.getAllBlockPositions().entrySet()) {
 			Block currentBlock = entry.getKey();
@@ -133,7 +146,6 @@ public class Game extends ApplicationAdapter {
 			double ySize = currentTexture.getHeight()/yScale;
 			double xPos = (currentPos.x - playerPos.x) * (PPM/xScale) + Gdx.graphics.getWidth() / 2 - xSize / 2;
 			double yPos = (currentPos.y - playerPos.y) * (PPM/yScale) + Gdx.graphics.getHeight() / 2 - ySize / 2;
-			System.out.println(xSize + " " + ySize);
 			batch.draw(currentTexture, (float) xPos, (float) yPos, (float) xSize, (float) ySize);
 		}
 		batch.end();

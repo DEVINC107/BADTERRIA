@@ -1,10 +1,7 @@
 package com.mygdx.game.Block;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.BlockTracker;
 import com.mygdx.game.TUtility;
 
@@ -24,11 +21,12 @@ public class Block {
     public void setCollision(Vector2 position, World world) {
         // creates collisions somehow idk
         BodyDef groundBodyDef = new BodyDef();
+        groundBodyDef.type = BodyDef.BodyType.StaticBody;
         groundBodyDef.position.set(position);
         Body groundBody = world.createBody(groundBodyDef);
         PolygonShape groundBox = new PolygonShape();
         groundBox.setAsBox((float) 0.5, (float) 0.5);
-        groundBody.createFixture(groundBox, 0);
+        groundBody.createFixture(groundBox,0);
         groundBox.dispose();
     }
 
