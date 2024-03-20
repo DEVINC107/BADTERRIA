@@ -1,5 +1,7 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Polygon;
 import com.mygdx.game.Block.Block;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -64,9 +66,8 @@ public class Game extends ApplicationAdapter {
 // Create our body in the world using our body definition
 		Body body = world.createBody(bodyDef);
 		player = body;
-// Create a circle shape and set its radius to 6
 		PolygonShape box = new PolygonShape();
-		box.setAsBox((float) 0.5, 1);
+		box.setAsBox(0.5f, 0.75f, new Vector2(0,0.25f),0);
 
 
 // Create a fixture definition to apply our shape to
@@ -75,6 +76,13 @@ public class Game extends ApplicationAdapter {
 		fixtureDef.density = 0f;
 		fixtureDef.friction = 0f;
 		fixtureDef.restitution = 0f; // Make it bounce a little bit
+
+		CircleShape cShape = new CircleShape();
+		cShape.setRadius(0.5f);
+		cShape.setPosition(new Vector2(0,-0.5f));
+		FixtureDef circle = new FixtureDef();
+		circle.shape = cShape;
+		body.createFixture(circle);
 
 // Create our fixture and attach it to the body
 		Fixture fixture = body.createFixture(fixtureDef);

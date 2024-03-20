@@ -8,6 +8,8 @@ import com.mygdx.game.TUtility;
 public class Block {
     private String name;
     private int health;
+    float xSize = 0.5f;
+    float ySize = 0.5f;
 
     public Block(String name, Vector2 position) {
         this.name = name;
@@ -25,7 +27,7 @@ public class Block {
         groundBodyDef.position.set(position);
         Body groundBody = world.createBody(groundBodyDef);
         PolygonShape groundBox = new PolygonShape();
-        groundBox.setAsBox((float) 0.5, (float) 0.5);
+        groundBox.setAsBox(xSize, ySize);
         groundBody.createFixture(groundBox,0);
         groundBox.dispose();
     }
