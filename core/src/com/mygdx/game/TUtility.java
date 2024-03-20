@@ -1,5 +1,8 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -16,7 +19,7 @@ public class TUtility {
     public static ArrayList<String> readFile(String name) {
         ArrayList<String> lines = new ArrayList<String>();
         try {
-            File myFile = new File(name);
+            File myFile = Gdx.files.internal(name).file();
             Scanner fileScanner = new Scanner(myFile);
             while (fileScanner.hasNext()) {
                 String data = fileScanner.nextLine();
