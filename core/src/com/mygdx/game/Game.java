@@ -32,6 +32,7 @@ public class Game extends ApplicationAdapter {
 	double BLOCKS_VERTICAL_AXIS = 20;
 	double PPM = 100;
 	boolean reachedMaxJumpVel = false;
+	boolean goingLeft = false;
 
 	public void drawSprite(Sprite sprite, double x, double y) {
 		Vector2 playerPos = player.getPosition();
@@ -41,13 +42,12 @@ public class Game extends ApplicationAdapter {
 		double ySize = sprite.getHeight()/yScale;
 		double xPos = (x - playerPos.x) * (PPM/xScale) + Gdx.graphics.getWidth() / 2 - xSize / 2;
 		double yPos = (y - playerPos.y) * (PPM/yScale) + Gdx.graphics.getHeight() / 2 - ySize / 2;
-		System.out.println(xSize + " " + ySize);
 		batch.draw(sprite, (float) xPos, (float) yPos, (float) xSize, (float) ySize);
 	}
 
 	@Override
 	public void create () {
-		img = new Texture("Images/player.png");
+		img = new Texture("Images/Player/player_left.png");
 		playerSprite = new Sprite(img);
 		batch = new SpriteBatch();
 		world = new World(new Vector2(0, -10), true);
@@ -109,13 +109,18 @@ public class Game extends ApplicationAdapter {
 		float MAX_VELOCITY = 3.5f;
 		float MAX_JUMP_VEL = 5f;
 // apply left impulse, but only if max velocity is not reached yet
-		if (Gdx.input.isKeyPressed(Input.Keys.A) && vel.x > -MAX_VELOCITY) {
-			this.player.applyLinearImpulse(-1.1f, 0, pos.x, pos.y, true);
+		if (Gdx.input.isKeyPressed(Input.Keys.A) ) {
+			goingLeft = true;
+			if (vel.x > -MAX_VELOCITY) {
+				this.player.applyLinearImpulse(-1.1f, 0, pos.x, pos.y, true);
+			}
 		}
-
 // apply right impulse, but only if max velocity is not reached yet
-		if (Gdx.input.isKeyPressed(Input.Keys.D) && vel.x < MAX_VELOCITY) {
-			this.player.applyLinearImpulse(1.1f, 0, pos.x, pos.y, true);
+		if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+			goingLeft = false;
+			if (vel.x < MAX_VELOCITY) {
+				this.player.applyLinearImpulse(1.1f, 0, pos.x, pos.y, true);
+			}
 		}
 		if (Math.abs(player.getLinearVelocity().x) > 0) {
 			player.applyLinearImpulse(-player.getLinearVelocity().x/10,0f,pos.x,pos.y,true);
@@ -159,7 +164,11 @@ public class Game extends ApplicationAdapter {
 		batch.end();
 		// You know the rest...
 		batch.begin();
-		drawSprite(playerSprite,playerPos.x,playerPos.y);
+		if (goingLeft) {
+			drawSprite(playerSprite,playerPos.x,playerPos.y);
+		} else {
+			drawSprite(new Sprite(new Texture("Images/Player/player_right.png")),playerPos.x,playerPos.y);
+		}
 		batch.end();
 		debugRenderer.render(world, camera.combined);
 
