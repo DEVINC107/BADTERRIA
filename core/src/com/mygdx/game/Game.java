@@ -91,11 +91,18 @@ public class Game extends ApplicationAdapter {
 // BodyDef and FixtureDef don't need disposing, but shapes do.
 		box.dispose();
 
+
+
 		// add block textures
 		blockTextures = new HashMap<>();
 		blockTextures.put("Grass", new Texture("Images/Blocks/grass.png"));
 		blockTextures.put("Dirt", new Texture("Images/Blocks/dirt.png"));
 		blockTextures.put("Stone", new Texture("Images/Blocks/stone.png"));
+		blockTextures.put("Leaves", new Texture("Images/Blocks/dirt.png"));
+		blockTextures.put("Wood", new Texture("Images/Blocks/wood.png"));
+
+		//starts some stuff
+		TerrainGenerator.setTreeData();
 
 		// creates blocks
 		TerrainGenerator.generateTerrain();

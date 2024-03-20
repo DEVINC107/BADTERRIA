@@ -44,4 +44,7 @@ public class BlockTracker {
     public static HashMap<Block, Vector2> getAllBlockPositions() {
         return blockPositions;
     }
+    public static boolean hasBlockAtPosition(Vector2 pos) {
+        return getBlocksAtPosition(pos).size() > 0;
+    }
 }
