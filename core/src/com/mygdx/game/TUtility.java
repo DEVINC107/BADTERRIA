@@ -1,12 +1,34 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.sql.Array;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class TUtility {
     public TUtility() {
 
+    }
+
+    public static ArrayList<String> readFile(String name) {
+        ArrayList<String> lines = new ArrayList<String>();
+        try {
+            File myFile = Gdx.files.internal(name).file();
+            Scanner fileScanner = new Scanner(myFile);
+            while (fileScanner.hasNext()) {
+                String data = fileScanner.nextLine();
+                lines.add(data);
+            }
+        } catch (IOException exception) {
+            System.out.println(exception.getMessage());
+        }
+        return lines;
     }
 
     public static int getInitialBlockHealth(String blockName) {
