@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.Block.Block;
+import com.mygdx.game.Block.CreateBlock;
 import com.mygdx.game.Block.DefaultBlock;
 
 import java.util.ArrayList;
@@ -53,8 +54,11 @@ public class TerrainGenerator {
         for (HashMap.Entry<Vector2, String> entry : chosenTree.entrySet()) {
             Vector2 blockPos = entry.getKey();
             String blockName = entry.getValue();
-            if (!BlockTracker.hasBlockAtPosition(blockPos.add(pos))) {
-                new DefaultBlock(blockName, blockPos.add(pos));
+            Vector2 placeAt = new Vector2(0, 0);
+            placeAt.add(pos);
+            placeAt.add(blockPos);
+            if (!BlockTracker.hasBlockAtPosition(placeAt)) {
+                new CreateBlock(blockName, placeAt);
             }
         }
     }
@@ -65,12 +69,13 @@ public class TerrainGenerator {
     private static final int DIRT_LENGTH = 3;
     private static final int MAX_HILL_HEIGHT = 12;
     private static final int MAX_FLAT_LENGTH = 5;
+    private static final int TREE_GENERATE_FREQUENCY = 10; // 0 to 100
     public static void generateTerrain() {
 
         boolean targetReached = false;
         int targetHillHeight = TUtility.getRandomInt(0, MAX_HILL_HEIGHT);
         double currentHillHeight = 0;
-        double heightIncrementIncrement = TUtility.getRandomDouble(0.3, 0.4);
+        double heightIncrementIncrement = TUtility.getRandomDouble(0.2, 0.3);
         double heightIncrement = heightIncrementIncrement;
         int targetFlatLength = (int) (Math.random() * MAX_FLAT_LENGTH + 1);
         int currentFlatLength = 0;
@@ -78,16 +83,16 @@ public class TerrainGenerator {
         for (int x = -MAP_LENGTH / 2; x < MAP_LENGTH / 2; x++) {
             int startingHeight = Math.round((float) currentHillHeight);
             int currentHeight = startingHeight - 1;
-            if (TUtility.getRandomInt(1, 5) == 1) {
-                generateTree(new Vector2(x, startingHeight + currentHeight));
+            if (TUtility.getRandomInt(1, 100) <= TREE_GENERATE_FREQUENCY) {
+                generateTree(new Vector2(x, currentHeight + 1));
             }
-            new DefaultBlock("Grass", new Vector2(x, startingHeight));
-            for (int y = currentHeight; y > currentHeight - DIRT_LENGTH; y--) {
-                new DefaultBlock("Dirt", new Vector2(x, y));
+            new CreateBlock("Grass", new Vector2(x, currentHeight));
+            for (int y = currentHeight - 1; y > currentHeight - DIRT_LENGTH; y--) {
+                new CreateBlock("Dirt", new Vector2(x, y));
             }
             currentHeight = currentHeight - DIRT_LENGTH;
             for (int y = currentHeight; y > -MAP_HEIGHT; y--) {
-                new DefaultBlock("Stone", new Vector2(x, y));
+                new CreateBlock("Stone", new Vector2(x, y));
             }
 
             // changes current Hill Height
@@ -97,7 +102,7 @@ public class TerrainGenerator {
                     targetHillHeight = TUtility.getRandomInt(0, MAX_HILL_HEIGHT);
                     targetFlatLength = (int) (Math.random() * MAX_FLAT_LENGTH + 1);
                     currentFlatLength = 0;
-                    heightIncrementIncrement = TUtility.getRandomDouble(0.3, 0.4);
+                    heightIncrementIncrement = TUtility.getRandomDouble(0.2, 0.3);
                     heightIncrement = heightIncrementIncrement;
                     targetReached = false;
                 }

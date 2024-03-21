@@ -30,7 +30,7 @@ public class TUtility {
         }
         for (String line : lines) {
             if (line.indexOf(token) == 0) {
-                line = line.substring(token.length());
+                line = line.substring(token.length() + 1);
                 return line.split(",");
             }
         }
@@ -52,7 +52,7 @@ public class TUtility {
                 }
             }
         } catch (IOException exception) {
-            System.out.println(exception.getMessage());
+
         }
         return 69420;
     }

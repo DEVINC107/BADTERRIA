@@ -102,7 +102,7 @@ public class Game extends ApplicationAdapter {
 		blockTextures.put("Grass", new Texture("Images/Blocks/grass.png"));
 		blockTextures.put("Dirt", new Texture("Images/Blocks/dirt.png"));
 		blockTextures.put("Stone", new Texture("Images/Blocks/stone.png"));
-		blockTextures.put("Leaves", new Texture("Images/Blocks/dirt.png"));
+		blockTextures.put("Leaves", new Texture("Images/Blocks/leaves.png"));
 		blockTextures.put("Wood", new Texture("Images/Blocks/wood.png"));
 
 		//starts some stuff
