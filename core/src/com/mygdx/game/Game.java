@@ -47,6 +47,10 @@ public class Game extends ApplicationAdapter {
 
 	@Override
 	public void create () {
+		for (String a : TUtility.getData("Entity.txt","player")) {
+			System.out.println(a);
+		}
+		System.out.println(TUtility.getData("Entity.txt","player"));
 		img = new Texture("Images/Player/player_left.png");
 		playerSprite = new Sprite(img);
 		batch = new SpriteBatch();

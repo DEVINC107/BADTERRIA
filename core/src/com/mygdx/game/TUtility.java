@@ -16,10 +16,10 @@ public class TUtility {
 
     }
 
-    public static ArrayList<String> readFile(String name) {
+    public static String[] getData(String file, String token) {
         ArrayList<String> lines = new ArrayList<String>();
         try {
-            File myFile = Gdx.files.internal(name).file();
+            File myFile = Gdx.files.internal(file).file();
             Scanner fileScanner = new Scanner(myFile);
             while (fileScanner.hasNext()) {
                 String data = fileScanner.nextLine();
@@ -28,8 +28,16 @@ public class TUtility {
         } catch (IOException exception) {
             System.out.println(exception.getMessage());
         }
-        return lines;
+        for (String line : lines) {
+            if (line.indexOf(token) == 0) {
+                line = line.substring(token.length());
+                return line.split(",");
+            }
+        }
+        return null;
     }
+
+
 
     public static int getInitialBlockHealth(String blockName) {
         try {
