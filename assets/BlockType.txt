@@ -3,3 +3,4 @@ Dirt,Default
 Stone,Default
 Wood,Default
 Leaves,Noncollidable
+Water,Noncollidables

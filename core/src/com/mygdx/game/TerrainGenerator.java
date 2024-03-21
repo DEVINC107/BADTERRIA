@@ -43,7 +43,7 @@ public class TerrainGenerator {
         tree2.put(new Vector2(-1, 2), "Leaves");
         tree2.put(new Vector2(0, 2), "Leaves");
         tree2.put(new Vector2(1, 2), "Leaves");
-        tree2.put(new Vector2(2, 3), "Leaves");
+        tree2.put(new Vector2(2, 2), "Leaves");
         tree2.put(new Vector2(-2, 3), "Leaves");
         tree2.put(new Vector2(-1, 3), "Leaves");
         tree2.put(new Vector2(0, 3), "Leaves");
@@ -73,24 +73,24 @@ public class TerrainGenerator {
     }
 
 
-    private static final int MAP_LENGTH = 80;
-    private static final int MAP_HEIGHT = 10;
     private static final int DIRT_LENGTH = 3;
     private static final int MAX_HILL_HEIGHT = 12;
     private static final int MAX_FLAT_LENGTH = 5;
     private static final int TREE_GENERATE_FREQUENCY = 10; // 0 to 100
-    public static void generateTerrain() {
+    private static final int MAP_LENGTH = 80;
+    private static final int MAP_HEIGHT = 10;
+
+    public static void generateHillsTerrain(int startX, int endX) {
 
         boolean targetReached = false;
         int targetHillHeight = TUtility.getRandomInt(0, MAX_HILL_HEIGHT);
-        double currentHillHeight = 0;
         double heightIncrementIncrement = TUtility.getRandomDouble(0.2, 0.3);
         double heightIncrement = heightIncrementIncrement;
         int targetFlatLength = (int) (Math.random() * MAX_FLAT_LENGTH + 1);
         int currentFlatLength = 0;
 
-        for (int x = -MAP_LENGTH / 2; x < MAP_LENGTH / 2; x++) {
-            int startingHeight = Math.round((float) currentHillHeight);
+        for (int x = startX / 2; x < endX / 2; x++) {
+            int startingHeight = Math.round((float) currentElevation);
             int currentHeight = startingHeight - 1;
             if (TUtility.getRandomInt(1, 100) <= TREE_GENERATE_FREQUENCY) {
                 generateTree(new Vector2(x, currentHeight + 1));
@@ -117,22 +117,32 @@ public class TerrainGenerator {
                 }
             } else {
                 heightIncrement += heightIncrementIncrement;
-                if (currentHillHeight < targetHillHeight) {
-                    currentHillHeight += heightIncrement;
-                    if (currentHillHeight >= targetHillHeight) {
+                if (currentElevation < targetHillHeight) {
+                    currentElevation += heightIncrement;
+                    if (currentElevation >= targetHillHeight) {
                         targetReached = true;
                     }
                 } else {
-                    currentHillHeight -= heightIncrement;
-                    if (currentHillHeight <= targetHillHeight) {
+                    currentElevation -= heightIncrement;
+                    if (currentElevation <= targetHillHeight) {
                         targetReached = true;
                     }
                 }
 
                 if (targetReached) {
-                    currentHillHeight = targetHillHeight;
+                    currentElevation = targetHillHeight;
                 }
             }
+        }
+    }
+
+    public static double currentElevation = 0;
+    public static void generateTerrain() {
+        int currentX = -MAP_LENGTH/2;
+        while (currentX <= MAP_LENGTH/2) {
+            int generateLength = 10;
+            generateHillsTerrain(currentX, currentX + generateLength);
+            currentX += generateLength;
         }
     }
 }
