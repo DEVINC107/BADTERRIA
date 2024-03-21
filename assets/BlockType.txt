@@ -1,0 +1,5 @@
+Grass,Default
+Dirt,Default
+Stone,Default
+Wood,Default
+Leaves,Noncollidable

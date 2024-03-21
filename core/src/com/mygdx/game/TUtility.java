@@ -52,7 +52,7 @@ public class TUtility {
                 }
             }
         } catch (IOException exception) {
-            System.out.println(exception.getMessage());
+
         }
         return 69420;
     }
