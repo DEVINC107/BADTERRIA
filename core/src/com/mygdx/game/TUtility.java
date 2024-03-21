@@ -30,7 +30,7 @@ public class TUtility {
         }
         for (String line : lines) {
             if (line.indexOf(token) == 0) {
-                line = line.substring(token.length());
+                line = line.substring(token.length() + 1);
                 return line.split(",");
             }
         }

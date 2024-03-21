@@ -15,18 +15,17 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.Block.DefaultBlock;
+import com.mygdx.game.Entity.Player;
 
 import java.util.HashMap;
 
 
 public class Game extends ApplicationAdapter {
-	World world;
-	SpriteBatch batch;
-	Box2DDebugRenderer debugRenderer;
-	OrthographicCamera camera;
-	Body player;
-	Sprite playerSprite;
-	Texture img;
+	public static World world;
+	public static SpriteBatch batch;
+	public static Box2DDebugRenderer debugRenderer;
+	public static OrthographicCamera camera;
+	public static Player player;
 	HashMap<String, Texture> blockTextures;
 	double BLOCKS_HORIZONTAL_AXIS = 26;
 	double BLOCKS_VERTICAL_AXIS = 20;
@@ -35,7 +34,7 @@ public class Game extends ApplicationAdapter {
 	boolean goingLeft = false;
 
 	public void drawSprite(Sprite sprite, double x, double y) {
-		Vector2 playerPos = player.getPosition();
+		Vector2 playerPos = player.body.getPosition();
 		float xScale = (float)(BLOCKS_HORIZONTAL_AXIS/(Gdx.graphics.getWidth()/PPM));
 		float yScale = (float)(BLOCKS_VERTICAL_AXIS/(Gdx.graphics.getHeight()/PPM));
 		double xSize = sprite.getWidth()/xScale;
@@ -47,53 +46,14 @@ public class Game extends ApplicationAdapter {
 
 	@Override
 	public void create () {
-		for (String a : TUtility.getData("Entity.txt","player")) {
-			System.out.println(a);
-		}
-		System.out.println(TUtility.getData("Entity.txt","player"));
-		img = new Texture("Images/Player/player_left.png");
-		playerSprite = new Sprite(img);
 		batch = new SpriteBatch();
 		world = new World(new Vector2(0, -10), true);
+		player = new Player();
 		BlockTracker.setWorld(world);
 		debugRenderer = new Box2DDebugRenderer();
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, (float) BLOCKS_HORIZONTAL_AXIS,(float) BLOCKS_VERTICAL_AXIS);
 		System.out.println(camera.position);
-		// First we create a body definition
-		BodyDef bodyDef = new BodyDef();
-// We set our body to dynamic, for something like ground which doesn't move we would set it to StaticBody
-		bodyDef.type = BodyDef.BodyType.DynamicBody;
-// Set our body's starting position in the world
-		bodyDef.position.set(0, 10);
-
-// Create our body in the world using our body definition
-		Body body = world.createBody(bodyDef);
-		player = body;
-		PolygonShape box = new PolygonShape();
-		box.setAsBox(0.5f, 0.75f, new Vector2(0,0.25f),0);
-
-
-// Create a fixture definition to apply our shape to
-		FixtureDef fixtureDef = new FixtureDef();
-		fixtureDef.shape = box;
-		fixtureDef.density = 0f;
-		fixtureDef.friction = 0f;
-		fixtureDef.restitution = 0f; // Make it bounce a little bit
-
-		CircleShape cShape = new CircleShape();
-		cShape.setRadius(0.5f);
-		cShape.setPosition(new Vector2(0,-0.5f));
-		FixtureDef circle = new FixtureDef();
-		circle.shape = cShape;
-		body.createFixture(circle);
-
-// Create our fixture and attach it to the body
-		Fixture fixture = body.createFixture(fixtureDef);
-
-// Remember to dispose of any shapes after you're done with them!
-// BodyDef and FixtureDef don't need disposing, but shapes do.
-		box.dispose();
 
 
 
@@ -115,44 +75,44 @@ public class Game extends ApplicationAdapter {
 	@Override
 	public void render () {
 
-		Vector2 vel = this.player.getLinearVelocity();
-		Vector2 pos = this.player.getPosition();
+		Vector2 vel = player.body.getLinearVelocity();
+		Vector2 pos = player.body.getPosition();
 		float MAX_VELOCITY = 3.5f;
 		float MAX_JUMP_VEL = 5f;
 // apply left impulse, but only if max velocity is not reached yet
 		if (Gdx.input.isKeyPressed(Input.Keys.A) ) {
 			goingLeft = true;
 			if (vel.x > -MAX_VELOCITY) {
-				this.player.applyLinearImpulse(-1.1f, 0, pos.x, pos.y, true);
+				player.body.applyLinearImpulse(-1.1f, 0, pos.x, pos.y, true);
 			}
 		}
 // apply right impulse, but only if max velocity is not reached yet
 		if (Gdx.input.isKeyPressed(Input.Keys.D)) {
 			goingLeft = false;
 			if (vel.x < MAX_VELOCITY) {
-				this.player.applyLinearImpulse(1.1f, 0, pos.x, pos.y, true);
+				player.body.applyLinearImpulse(1.1f, 0, pos.x, pos.y, true);
 			}
 		}
-		if (Math.abs(player.getLinearVelocity().x) > 0) {
-			player.applyLinearImpulse(-player.getLinearVelocity().x/10,0f,pos.x,pos.y,true);
+		if (Math.abs(player.body.getLinearVelocity().x) > 0) {
+			player.body.applyLinearImpulse(-player.body.getLinearVelocity().x/10,0f,pos.x,pos.y,true);
 		}
 		if (reachedMaxJumpVel) {
-			if (player.getLinearVelocity().y == 0) {
+			if (player.body.getLinearVelocity().y == 0) {
 				reachedMaxJumpVel = false;
 			}
 		}
-		if (player.getLinearVelocity().y >= MAX_JUMP_VEL) {
+		if (player.body.getLinearVelocity().y >= MAX_JUMP_VEL) {
 			reachedMaxJumpVel = true;
 		}
 		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-			if (!reachedMaxJumpVel && player.getLinearVelocity().y >= 0) {
-				this.player.applyLinearImpulse(0, 1.1f, pos.x, pos.y, true);
+			if (!reachedMaxJumpVel && player.body.getLinearVelocity().y >= 0) {
+				player.body.applyLinearImpulse(0, 1.1f, pos.x, pos.y, true);
 			}
 		}
 		ScreenUtils.clear(1, 0, 0, 1);
 		world.step(1/60f, 6, 2);
-		camera.position.x = player.getPosition().x;
-		camera.position.y = player.getPosition().y;
+		camera.position.x = player.body.getPosition().x;
+		camera.position.y = player.body.getPosition().y;
 		camera.position.z = 0;
 		camera.update();
 		//playerSprite.setPosition(player.getPosition().x, player.getPosition().y);
@@ -160,7 +120,7 @@ public class Game extends ApplicationAdapter {
 		// renders blocks
 		float xScale = (float)(BLOCKS_HORIZONTAL_AXIS/(Gdx.graphics.getWidth()/PPM));
 		float yScale = (float)(BLOCKS_VERTICAL_AXIS/(Gdx.graphics.getHeight()/PPM));
-		Vector2 playerPos = player.getPosition();
+		Vector2 playerPos = player.body.getPosition();
 		for (HashMap.Entry<Block, Vector2> entry : BlockTracker.getAllBlockPositions().entrySet()) {
 			Block currentBlock = entry.getKey();
 			Vector2 currentPos = entry.getValue();
@@ -176,7 +136,7 @@ public class Game extends ApplicationAdapter {
 		// You know the rest...
 		batch.begin();
 		if (goingLeft) {
-			drawSprite(playerSprite,playerPos.x,playerPos.y);
+			drawSprite(new Sprite(new Texture("Images/Player/player_left.png")),playerPos.x,playerPos.y);
 		} else {
 			drawSprite(new Sprite(new Texture("Images/Player/player_right.png")),playerPos.x,playerPos.y);
 		}

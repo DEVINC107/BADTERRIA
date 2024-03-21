@@ -1,2 +1,2 @@
-player,100
+Player,100
 demon,200
