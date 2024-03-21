@@ -1,11 +1,15 @@
 package com.mygdx.game.Entity;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.Game;
 
 public class Player extends Entity {
     public Body body;
+    int numSlots = 9;
     public Player() {
         super("Player");
         BodyDef bodyDef = new BodyDef();
@@ -29,5 +33,14 @@ public class Player extends Entity {
 
         body.createFixture(circle);
         body.createFixture(fixtureDef);
+    }
+
+    public void renderSlots() {
+        Game.batch.begin();
+        float pps = (float) (Gdx.graphics.getWidth()/2)/numSlots;
+        for (int i = 0; i < numSlots; i ++) {
+            Game.batch.draw(new Texture("Images/HotbarSlot.png"),i*(pps+1),Gdx.graphics.getHeight()-pps,pps,pps);
+        }
+        Game.batch.end();
     }
 }

@@ -134,6 +134,7 @@ public class Game extends ApplicationAdapter {
 			batch.draw(currentTexture, (float) xPos, (float) yPos, (float) xSize, (float) ySize);
 		}
 		batch.end();
+		player.renderSlots();
 		// You know the rest...
 		batch.begin();
 		if (goingLeft) {
