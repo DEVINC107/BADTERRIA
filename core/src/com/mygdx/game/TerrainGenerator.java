@@ -39,13 +39,22 @@ public class TerrainGenerator {
         HashMap<Vector2, String> tree2 = new HashMap<>();
         tree2.put(new Vector2(0, 0), "Wood");
         tree2.put(new Vector2(0, 1), "Wood");
-        tree2.put(new Vector2(0, 2), "Wood");
+        tree2.put(new Vector2(-2, 2), "Leaves");
+        tree2.put(new Vector2(-1, 2), "Leaves");
+        tree2.put(new Vector2(0, 2), "Leaves");
+        tree2.put(new Vector2(1, 2), "Leaves");
+        tree2.put(new Vector2(2, 3), "Leaves");
+        tree2.put(new Vector2(-2, 3), "Leaves");
         tree2.put(new Vector2(-1, 3), "Leaves");
         tree2.put(new Vector2(0, 3), "Leaves");
         tree2.put(new Vector2(1, 3), "Leaves");
+        tree2.put(new Vector2(2, 3), "Leaves");
         tree2.put(new Vector2(-1, 4), "Leaves");
         tree2.put(new Vector2(0, 4), "Leaves");
         tree2.put(new Vector2(1, 4), "Leaves");
+        tree2.put(new Vector2(-1, 5), "Leaves");
+        tree2.put(new Vector2(0, 5), "Leaves");
+        tree2.put(new Vector2(1, 5), "Leaves");
         treeData.add(tree2);
     }
     public static void generateTree(Vector2 pos) {
