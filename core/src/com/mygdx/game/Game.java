@@ -31,6 +31,7 @@ public class Game extends ApplicationAdapter {
 	static double BLOCKS_VERTICAL_AXIS = 20;
 	static double PPM = 100;
 	boolean reachedMaxJumpVel = false;
+	double highestJumpVel = 0;
 	boolean goingLeft = false;
 
 	public static void drawSprite(Sprite sprite, double x, double y, int rot) {
@@ -108,6 +109,7 @@ public class Game extends ApplicationAdapter {
 		if (reachedMaxJumpVel) {
 			if (player.body.getLinearVelocity().y == 0) {
 				reachedMaxJumpVel = false;
+				highestJumpVel = 0;
 			}
 		}
 		if (player.body.getLinearVelocity().y >= MAX_JUMP_VEL) {
@@ -117,6 +119,12 @@ public class Game extends ApplicationAdapter {
 			if (!reachedMaxJumpVel && player.body.getLinearVelocity().y >= 0) {
 				player.body.applyLinearImpulse(0, 1.1f, pos.x, pos.y, true);
 			}
+		}
+		if (player.body.getLinearVelocity().y < highestJumpVel) {
+			reachedMaxJumpVel = true;
+		}
+		if (player.body.getLinearVelocity().y > highestJumpVel) {
+			highestJumpVel = player.body.getLinearVelocity().y;
 		}
 		ScreenUtils.clear(1, 0, 0, 1);
 		world.step(1/60f, 6, 2);
