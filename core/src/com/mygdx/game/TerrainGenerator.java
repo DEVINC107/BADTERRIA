@@ -119,13 +119,8 @@ public class TerrainGenerator {
 
         for (int x = startX; x <= endX; x++) {
             int currentHeight = Math.round((float) currentElevation);
-            int currentWaterDepth = x - startX;
-            if (endX - x < currentWaterDepth) {
-                currentWaterDepth = endX - x;
-            }
-            if (currentWaterDepth > MAX_WATER_DEPTH) {
-                currentWaterDepth = MAX_WATER_DEPTH;
-            }
+            int currentWaterDepth = Math.min(Math.min(x - startX, endX - x), MAX_WATER_DEPTH);
+
             for (int y = currentHeight; y > currentHeight - currentWaterDepth; y--) {
                 new CreateBlock("Water", new Vector2(x, y));
             }
@@ -147,12 +142,11 @@ public class TerrainGenerator {
 
         boolean targetReached = false;
         int targetHillHeight = TUtility.getRandomInt(MIN_MOUNTAIN_HEIGHT, MAX_MOUNTAIN_HEIGHT);
-        double heightIncrementIncrement = TUtility.getRandomDouble(0.5,0.8);
-        double heightIncrement = heightIncrementIncrement;
+        int startingHillHeight = Math.round((float) currentElevation);
         int targetFlatLength = (int) (Math.random() * MAX_FLAT_LENGTH + 1);
         int currentFlatLength = 0;
 
-        int generateLength = 50;
+        int generateLength = 40;
         if (MAP_LENGTH/2 - currentX < generateLength) {
             generateLength = MAP_LENGTH/2 - currentX;
         }
@@ -171,14 +165,13 @@ public class TerrainGenerator {
                 currentFlatLength += 1;
                 if (currentFlatLength >= targetFlatLength) {
                     targetHillHeight = TUtility.getRandomInt(0, MAX_MOUNTAIN_HEIGHT);
+                    startingHillHeight = Math.round((float) currentElevation);
                     targetFlatLength = (int) (Math.random() * MAX_FLAT_LENGTH + 1);
                     currentFlatLength = 0;
-                    heightIncrementIncrement = TUtility.getRandomDouble(0.5, 0.8);
-                    heightIncrement = heightIncrementIncrement;
                     targetReached = false;
                 }
             } else {
-                heightIncrement += heightIncrementIncrement;
+                double heightIncrement = Math.min(Math.abs(currentElevation - targetHillHeight), Math.abs(currentElevation - startingHillHeight)) / 3 + 0.5;
                 if (currentElevation < targetHillHeight) {
                     currentElevation += heightIncrement;
                     if (currentElevation >= targetHillHeight) {
@@ -205,8 +198,7 @@ public class TerrainGenerator {
 
         boolean targetReached = false;
         int targetHillHeight = TUtility.getRandomInt(0, MAX_HILL_HEIGHT);
-        double heightIncrementIncrement = TUtility.getRandomDouble(0.2, 0.3);
-        double heightIncrement = heightIncrementIncrement;
+        int startingHillHeight = Math.round((float) currentElevation);
         int targetFlatLength = (int) (Math.random() * MAX_FLAT_LENGTH + 1);
         int currentFlatLength = 0;
 
@@ -238,14 +230,13 @@ public class TerrainGenerator {
                 currentFlatLength += 1;
                 if (currentFlatLength >= targetFlatLength) {
                     targetHillHeight = TUtility.getRandomInt(0, MAX_HILL_HEIGHT);
+                    startingHillHeight = Math.round((float) currentElevation);
                     targetFlatLength = (int) (Math.random() * MAX_FLAT_LENGTH + 1);
                     currentFlatLength = 0;
-                    heightIncrementIncrement = TUtility.getRandomDouble(0.2, 0.3);
-                    heightIncrement = heightIncrementIncrement;
                     targetReached = false;
                 }
             } else {
-                heightIncrement += heightIncrementIncrement;
+                double heightIncrement = Math.min(Math.abs(currentElevation - targetHillHeight), Math.abs(currentElevation - startingHillHeight)) / 3 + 0.5;
                 if (currentElevation < targetHillHeight) {
                     currentElevation += heightIncrement;
                     if (currentElevation >= targetHillHeight) {
@@ -269,9 +260,9 @@ public class TerrainGenerator {
         currentX = -MAP_LENGTH/2;
         while (currentX < MAP_LENGTH/2) {
             int random = TUtility.getRandomInt(1, 1000);
-            if (random < 200) {
+            if (random < 300) {
                 generateHillsTerrain();
-            } else if (random < 400) {
+            } else if (random < 600) {
                 generatePlainsTerrain();
             } else if (random <= 800) {
                 generateMountainsTerrain();
