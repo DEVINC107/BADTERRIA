@@ -72,15 +72,136 @@ public class TerrainGenerator {
         }
     }
 
-
-    private static final int DIRT_LENGTH = 3;
-    private static final int MAX_HILL_HEIGHT = 12;
-    private static final int MAX_FLAT_LENGTH = 5;
-    private static final int TREE_GENERATE_FREQUENCY = 10; // 0 to 100
-    private static final int MAP_LENGTH = 80;
+    private static final int MAP_LENGTH = 200;
     private static final int MAP_HEIGHT = 10;
+    private static final int DIRT_LENGTH = 3;
 
-    public static void generateHillsTerrain(int startX, int endX) {
+    public static double currentElevation = 0;
+
+    public static void generatePlainsTerrain() {
+        final int TREE_GENERATE_FREQUENCY = 10; // 0 to 100
+
+        int generateLength = 15;
+        if (MAP_LENGTH/2 - currentX < generateLength) {
+            generateLength = MAP_LENGTH/2 - currentX;
+        }
+        int startX = currentX;
+        currentX += generateLength;
+        int endX = currentX - 1;
+
+        for (int x = startX; x <= endX; x++) {
+            int currentHeight = Math.round((float) currentElevation);
+            if (TUtility.getRandomInt(1, 100) <= TREE_GENERATE_FREQUENCY) {
+                generateTree(new Vector2(x, currentHeight + 1));
+            }
+            new CreateBlock("Grass", new Vector2(x, currentHeight));
+            currentHeight -= 1;
+            for (int y = currentHeight; y > currentHeight - DIRT_LENGTH; y--) {
+                new CreateBlock("Dirt", new Vector2(x, y));
+            }
+            currentHeight -= DIRT_LENGTH;
+            for (int y = currentHeight; y > -MAP_HEIGHT; y--) {
+                new CreateBlock("Stone", new Vector2(x, y));
+            }
+        }
+    }
+
+    public static void generateLakeTerrain() {
+        final int MAX_WATER_DEPTH = 4;
+
+        int generateLength = 16;
+        if (MAP_LENGTH/2 - currentX < generateLength) {
+            generateLength = MAP_LENGTH/2 - currentX;
+        }
+        int startX = currentX;
+        currentX += generateLength;
+        int endX = currentX - 1;
+
+        for (int x = startX; x <= endX; x++) {
+            int currentHeight = Math.round((float) currentElevation);
+            int currentWaterDepth = x - startX;
+            if (endX - x < currentWaterDepth) {
+                currentWaterDepth = endX - x;
+            }
+            if (currentWaterDepth > MAX_WATER_DEPTH) {
+                currentWaterDepth = MAX_WATER_DEPTH;
+            }
+            for (int y = currentHeight; y > currentHeight - currentWaterDepth; y--) {
+                new CreateBlock("Water", new Vector2(x, y));
+            }
+            currentHeight -= currentWaterDepth;
+            for (int y = currentHeight; y > currentHeight - DIRT_LENGTH; y--) {
+                new CreateBlock("Dirt", new Vector2(x, y));
+            }
+            currentHeight -= DIRT_LENGTH;
+            for (int y = currentHeight; y > -MAP_HEIGHT; y--) {
+                new CreateBlock("Stone", new Vector2(x, y));
+            }
+        }
+    }
+
+    public static void generateMountainsTerrain() {
+        final int MAX_MOUNTAIN_HEIGHT = 30;
+        final int MIN_MOUNTAIN_HEIGHT = 20;
+        final int MAX_FLAT_LENGTH = 8;
+
+        boolean targetReached = false;
+        int targetHillHeight = TUtility.getRandomInt(MIN_MOUNTAIN_HEIGHT, MAX_MOUNTAIN_HEIGHT);
+        double heightIncrementIncrement = TUtility.getRandomDouble(0.5,0.8);
+        double heightIncrement = heightIncrementIncrement;
+        int targetFlatLength = (int) (Math.random() * MAX_FLAT_LENGTH + 1);
+        int currentFlatLength = 0;
+
+        int generateLength = 50;
+        if (MAP_LENGTH/2 - currentX < generateLength) {
+            generateLength = MAP_LENGTH/2 - currentX;
+        }
+        int startX = currentX;
+        currentX += generateLength;
+        int endX = currentX - 1;
+
+        for (int x = startX; x <= endX; x++) {
+            int currentHeight = Math.round((float) currentElevation);
+            for (int y = currentHeight; y > -MAP_HEIGHT; y--) {
+                new CreateBlock("Stone", new Vector2(x, y));
+            }
+
+            // changes current Hill Height
+            if (targetReached) {
+                currentFlatLength += 1;
+                if (currentFlatLength >= targetFlatLength) {
+                    targetHillHeight = TUtility.getRandomInt(0, MAX_MOUNTAIN_HEIGHT);
+                    targetFlatLength = (int) (Math.random() * MAX_FLAT_LENGTH + 1);
+                    currentFlatLength = 0;
+                    heightIncrementIncrement = TUtility.getRandomDouble(0.5, 0.8);
+                    heightIncrement = heightIncrementIncrement;
+                    targetReached = false;
+                }
+            } else {
+                heightIncrement += heightIncrementIncrement;
+                if (currentElevation < targetHillHeight) {
+                    currentElevation += heightIncrement;
+                    if (currentElevation >= targetHillHeight) {
+                        targetReached = true;
+                    }
+                } else {
+                    currentElevation -= heightIncrement;
+                    if (currentElevation <= targetHillHeight) {
+                        targetReached = true;
+                    }
+                }
+
+                if (targetReached) {
+                    currentElevation = targetHillHeight;
+                }
+            }
+        }
+    }
+
+    public static void generateHillsTerrain() {
+        final int MAX_HILL_HEIGHT = 12;
+        final int MAX_FLAT_LENGTH = 5;
+        final int TREE_GENERATE_FREQUENCY = 4; // 0 to 100
 
         boolean targetReached = false;
         int targetHillHeight = TUtility.getRandomInt(0, MAX_HILL_HEIGHT);
@@ -89,17 +210,25 @@ public class TerrainGenerator {
         int targetFlatLength = (int) (Math.random() * MAX_FLAT_LENGTH + 1);
         int currentFlatLength = 0;
 
-        for (int x = startX / 2; x < endX / 2; x++) {
-            int startingHeight = Math.round((float) currentElevation);
-            int currentHeight = startingHeight - 1;
+        int generateLength = 20;
+        if (MAP_LENGTH/2 - currentX < generateLength) {
+            generateLength = MAP_LENGTH/2 - currentX;
+        }
+        int startX = currentX;
+        currentX += generateLength;
+        int endX = currentX - 1;
+
+        for (int x = startX; x <= endX; x++) {
+            int currentHeight = Math.round((float) currentElevation);
             if (TUtility.getRandomInt(1, 100) <= TREE_GENERATE_FREQUENCY) {
                 generateTree(new Vector2(x, currentHeight + 1));
             }
             new CreateBlock("Grass", new Vector2(x, currentHeight));
-            for (int y = currentHeight - 1; y > currentHeight - DIRT_LENGTH; y--) {
+            currentHeight -= 1;
+            for (int y = currentHeight; y > currentHeight - DIRT_LENGTH; y--) {
                 new CreateBlock("Dirt", new Vector2(x, y));
             }
-            currentHeight = currentHeight - DIRT_LENGTH;
+            currentHeight -= DIRT_LENGTH;
             for (int y = currentHeight; y > -MAP_HEIGHT; y--) {
                 new CreateBlock("Stone", new Vector2(x, y));
             }
@@ -135,14 +264,20 @@ public class TerrainGenerator {
             }
         }
     }
-
-    public static double currentElevation = 0;
+    private static int currentX;
     public static void generateTerrain() {
-        int currentX = -MAP_LENGTH/2;
-        while (currentX <= MAP_LENGTH/2) {
-            int generateLength = 10;
-            generateHillsTerrain(currentX, currentX + generateLength);
-            currentX += generateLength;
+        currentX = -MAP_LENGTH/2;
+        while (currentX < MAP_LENGTH/2) {
+            int random = TUtility.getRandomInt(1, 1000);
+            if (random < 200) {
+                generateHillsTerrain();
+            } else if (random < 400) {
+                generatePlainsTerrain();
+            } else if (random <= 800) {
+                generateMountainsTerrain();
+            } else if (random <= 1000) {
+                generateLakeTerrain();
+            }
         }
     }
 }

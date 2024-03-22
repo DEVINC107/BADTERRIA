@@ -27,8 +27,8 @@ public class Game extends ApplicationAdapter {
 	public static OrthographicCamera camera;
 	public static Player player;
 	HashMap<String, Texture> blockTextures;
-	double BLOCKS_HORIZONTAL_AXIS = 26;
-	double BLOCKS_VERTICAL_AXIS = 20;
+	double BLOCKS_HORIZONTAL_AXIS = 26 * 2;
+	double BLOCKS_VERTICAL_AXIS = 20 * 2;
 	double PPM = 100;
 	boolean reachedMaxJumpVel = false;
 	boolean goingLeft = false;

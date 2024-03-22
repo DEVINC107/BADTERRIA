@@ -14,7 +14,7 @@ public class Player extends Entity {
         super("Player");
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(0, 10);
+        bodyDef.position.set(0, 40);
         Body body = Game.world.createBody(bodyDef);
         this.body = body;
         PolygonShape box = new PolygonShape();
