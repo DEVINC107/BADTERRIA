@@ -27,13 +27,13 @@ public class Game extends ApplicationAdapter {
 	public static OrthographicCamera camera;
 	public static Player player;
 	HashMap<String, Texture> blockTextures;
-	double BLOCKS_HORIZONTAL_AXIS = 26 * 2;
-	double BLOCKS_VERTICAL_AXIS = 20 * 2;
-	double PPM = 100;
+	static double BLOCKS_HORIZONTAL_AXIS = 26;
+	static double BLOCKS_VERTICAL_AXIS = 20;
+	static double PPM = 100;
 	boolean reachedMaxJumpVel = false;
 	boolean goingLeft = false;
 
-	public void drawSprite(Sprite sprite, double x, double y) {
+	public static void drawSprite(Sprite sprite, double x, double y, int rot) {
 		Vector2 playerPos = player.body.getPosition();
 		float xScale = (float)(BLOCKS_HORIZONTAL_AXIS/(Gdx.graphics.getWidth()/PPM));
 		float yScale = (float)(BLOCKS_VERTICAL_AXIS/(Gdx.graphics.getHeight()/PPM));
@@ -41,7 +41,15 @@ public class Game extends ApplicationAdapter {
 		double ySize = sprite.getHeight()/yScale;
 		double xPos = (x - playerPos.x) * (PPM/xScale) + Gdx.graphics.getWidth() / 2 - xSize / 2;
 		double yPos = (y - playerPos.y) * (PPM/yScale) + Gdx.graphics.getHeight() / 2 - ySize / 2;
-		batch.draw(sprite, (float) xPos, (float) yPos, (float) xSize, (float) ySize);
+		sprite.setPosition((float) xPos,(float) yPos);
+		sprite.setSize((float) xSize, (float) ySize);
+		sprite.setOrigin((float)xSize/2,(float)ySize/2);
+		sprite.setRotation(rot);
+		sprite.draw(batch);
+	}
+
+	public static void drawSprite(Sprite sprite, double x, double y) {
+		drawSprite(sprite,x,y,0);
 	}
 
 	@Override
@@ -145,7 +153,7 @@ public class Game extends ApplicationAdapter {
 		batch.end();
 		debugRenderer.render(world, camera.combined);
 
-
+		player.renderEquipped();
 	}
 
 	@Override
