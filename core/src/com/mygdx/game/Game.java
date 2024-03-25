@@ -104,9 +104,10 @@ public class Game extends ApplicationAdapter {
 		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
 			Vector2 mousePos = TUtility.getCursor();
 			ArrayList<Block> blocksAtPos = BlockTracker.getBlocksAtPosition(TUtility.getRoundedVector2(mousePos));
+			System.out.println(TUtility.getRoundedVector2(mousePos));
 
 			if (blocksAtPos.size() > 0) {
-				blocksAtPos.get(0).takeDamage(1);
+				blocksAtPos.get(0).takeDamage(10);
 			}
 		}
 	}

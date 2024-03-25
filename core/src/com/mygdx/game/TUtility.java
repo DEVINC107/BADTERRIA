@@ -47,7 +47,7 @@ public class TUtility {
         float f = (float) Gdx.input.getX();
         float fy = (float) Gdx.input.getY();
         Vector3 cam = Game.camera.position;
-        return pixelToMeter(new Vector2(cam.x + f,cam.y + fy));
+        return new Vector2(cam.x,cam.y).add(pixelToMeter(new Vector2(f, fy)));
     }
 
     public static Vector2 getRoundedVector2(Vector2 vecToRound) {
@@ -73,25 +73,6 @@ public class TUtility {
         sprite.draw(batch);
     }
 
-
-    public static int getInitialBlockHealth(String blockName) {
-        try {
-            File myFile = new File("src\\students.txt");
-            Scanner fileScanner = new Scanner(myFile);
-            while (fileScanner.hasNext()) {
-                String data = fileScanner.nextLine();
-                String[] splitData = data.split(",");
-                String currentName = splitData[0];
-                if (currentName.equals(blockName)) {
-                    return Integer.parseInt(splitData[1]);
-                }
-            }
-        } catch (IOException ignored) {
-
-        }
-        return -1;
-    }
-
     public static Vector2 meterToPixel(Vector2 meters) {
         float xScale = (float)(BLOCKS_HORIZONTAL_AXIS/(Gdx.graphics.getWidth()/PPM));
         float yScale = (float)(BLOCKS_VERTICAL_AXIS/(Gdx.graphics.getHeight()/PPM));
@@ -103,7 +84,7 @@ public class TUtility {
         float yScale = (float)(BLOCKS_VERTICAL_AXIS/(Gdx.graphics.getHeight()/PPM));
         float x = (float) ((pixels.x - Gdx.graphics.getWidth()/2) * (xScale/PPM));
         float y = (float) ((pixels.y - Gdx.graphics.getHeight()/2) * (yScale/PPM));
-        return new Vector2(x,y);
+        return new Vector2(x,-y);
     }
 
     public static Vector2 roundVec2(Vector2 vec) {

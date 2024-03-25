@@ -47,7 +47,7 @@ public class BlockTracker {
         int deltaY = (int) (pos.y-origin.y);
         int deltaX = (int) (pos.x-origin.x);
         int slope = deltaY/deltaX;
-        int remX =
+        //int remX =
     }
 
     public static HashMap<Block, Vector2> getAllBlockPositions() {

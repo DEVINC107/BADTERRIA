@@ -17,10 +17,14 @@ public class Block {
 
     public Block(String name, Vector2 position) {
         this.name = name;
-        int blockHealth = TUtility.getInitialBlockHealth(name);
+        int blockHealth = -1;
+        if (TUtility.getData("BlockHealth.txt", name) != null) {
+            blockHealth = Integer.parseInt(TUtility.getData("BlockHealth.txt", name)[0]);
+        }
         if (blockHealth != -1) {
             this.health = blockHealth;
             destroyable = true;
+            System.out.println(blockHealth);
         } else {
             this.health = -1;
             destroyable = false;
@@ -35,6 +39,7 @@ public class Block {
         if (groundBody != null && fixture != null) {
             groundBody.destroyFixture(fixture);
         }
+        BlockTracker.removeBlock(this);
     }
 
     //returns true if damage is successfully dealt
