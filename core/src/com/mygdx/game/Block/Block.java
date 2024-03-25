@@ -11,6 +11,9 @@ public class Block {
     private boolean destroyable;
     float xSize = 0.5f;
     float ySize = 0.5f;
+    private Body groundBody;
+    private PolygonShape groundBox;
+    private Fixture fixture;
 
     public Block(String name, Vector2 position) {
         this.name = name;
@@ -22,13 +25,25 @@ public class Block {
             this.health = -1;
             destroyable = false;
         }
+        groundBody = null;
+        groundBox = null;
+        fixture = null;
         BlockTracker.setPosition(this, position);
+    }
+
+    public void destroyBlock() {
+        if (groundBody != null && fixture != null) {
+            groundBody.destroyFixture(fixture);
+        }
     }
 
     //returns true if damage is successfully dealt
     public boolean takeDamage(int damage) {
         if (destroyable) {
             health -= damage;
+            if (health <= 0) {
+                destroyBlock();
+            }
             return true;
         }
         return false;
@@ -38,10 +53,10 @@ public class Block {
         BodyDef groundBodyDef = new BodyDef();
         groundBodyDef.type = BodyDef.BodyType.StaticBody;
         groundBodyDef.position.set(position);
-        Body groundBody = world.createBody(groundBodyDef);
-        PolygonShape groundBox = new PolygonShape();
+        groundBody = world.createBody(groundBodyDef);
+        groundBox = new PolygonShape();
         groundBox.setAsBox(xSize, ySize);
-        groundBody.createFixture(groundBox,0);
+        fixture = groundBody.createFixture(groundBox,0);
         groundBox.dispose();
     }
 

@@ -43,11 +43,15 @@ public class TUtility {
         return null;
     }
 
-    public Vector2 getCursor() {
+    public static Vector2 getCursor() {
         float f = (float) Gdx.input.getX();
         float fy = (float) Gdx.input.getY();
         Vector3 cam = Game.camera.position;
         return pixelToMeter(new Vector2(cam.x + f,cam.y + fy));
+    }
+
+    public static Vector2 getRoundedVector2(Vector2 vecToRound) {
+        return new Vector2(Math.round(vecToRound.x), Math.round(vecToRound.y));
     }
 
     public static void drawSprite(Sprite sprite, double x, double y) {
