@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.mygdx.game.Entity.Player;
 import com.mygdx.game.Game;
+import com.mygdx.game.TUtility;
 
 public class Item {
     private boolean manifested = false;
@@ -30,9 +31,11 @@ public class Item {
         manifested = false;
     }
 
+
+
     public void renderEquip(SpriteBatch batch, Player player) {
         Sprite s = new Sprite(new Texture("Images/Items/"+itemId+".png"));
-        Game.drawSprite(s,player.body.getPosition().x,player.body.getPosition().y,player.getDir()==0?90:270);
+        TUtility.drawSprite(s,player.body.getPosition().x,player.body.getPosition().y,player.getDir()==0?90:270);
     }
 
     public void unequip() {

@@ -2,6 +2,7 @@ package com.mygdx.game.Entity;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.Item.Item;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.Game;
 import com.mygdx.game.Item.Pickaxe;
+import com.mygdx.game.TUtility;
 
 public class Player extends Entity {
     public Body body;
@@ -130,9 +132,9 @@ public class Player extends Entity {
             highestJumpVel = body.getLinearVelocity().y;
         }
         if (dir == 0) {
-            Game.drawSprite(new Sprite(new Texture("Images/Player/player_left.png")),pos.x,pos.y);
+            TUtility.drawSprite(new Sprite(new Texture("Images/Player/player_left.png")),pos.x,pos.y);
         } else {
-            Game.drawSprite(new Sprite(new Texture("Images/Player/player_right.png")),pos.x,pos.y);
+            TUtility.drawSprite(new Sprite(new Texture("Images/Player/player_right.png")),pos.x,pos.y);
         }
         renderSlots();
         renderEquipped();
