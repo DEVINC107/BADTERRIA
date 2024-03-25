@@ -85,7 +85,7 @@ public class TUtility {
         } catch (IOException ignored) {
 
         }
-        return 69420;
+        return -1;
     }
 
     public static Vector2 meterToPixel(Vector2 meters) {
