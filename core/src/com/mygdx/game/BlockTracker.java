@@ -41,6 +41,15 @@ public class BlockTracker {
         return blocksAtPos;
     }
 
+    public static void raycast(Vector2 origin, Vector2 pos) {
+        origin = TUtility.roundVec2(origin);
+        pos = TUtility.roundVec2(pos);
+        int deltaY = (int) (pos.y-origin.y);
+        int deltaX = (int) (pos.x-origin.x);
+        int slope = deltaY/deltaX;
+        int remX =
+    }
+
     public static HashMap<Block, Vector2> getAllBlockPositions() {
         return blockPositions;
     }

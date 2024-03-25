@@ -82,7 +82,7 @@ public class TUtility {
                     return Integer.parseInt(splitData[1]);
                 }
             }
-        } catch (IOException exception) {
+        } catch (IOException ignored) {
 
         }
         return 69420;
@@ -100,6 +100,10 @@ public class TUtility {
         float x = (float) ((pixels.x - Gdx.graphics.getWidth()/2) * (xScale/PPM));
         float y = (float) ((pixels.y - Gdx.graphics.getHeight()/2) * (yScale/PPM));
         return new Vector2(x,y);
+    }
+
+    public static Vector2 roundVec2(Vector2 vec) {
+        return new Vector2(Math.round(vec.x),Math.round(vec.y));
     }
 
 

@@ -87,7 +87,6 @@ public class Game extends ApplicationAdapter {
 			Block currentBlock = entry.getKey();
 			Vector2 currentPos = entry.getValue();
 			Texture currentTexture = blockTextures.get(currentBlock.getName());
-
 			double xSize = currentTexture.getWidth()/xScale;
 			double ySize = currentTexture.getHeight()/yScale;
 			double xPos = (currentPos.x - playerPos.x) * (PPM/xScale) + Gdx.graphics.getWidth() / 2 - xSize / 2;
