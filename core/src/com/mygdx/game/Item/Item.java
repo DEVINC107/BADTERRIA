@@ -31,10 +31,8 @@ public class Item {
     }
 
     public void renderEquip(SpriteBatch batch, Player player) {
-        batch.begin();
         Sprite s = new Sprite(new Texture("Images/Items/"+itemId+".png"));
-        Game.drawSprite(s,player.body.getPosition().x,player.body.getPosition().y,90);
-        batch.end();
+        Game.drawSprite(s,player.body.getPosition().x,player.body.getPosition().y,player.getDir()==0?90:270);
     }
 
     public void unequip() {

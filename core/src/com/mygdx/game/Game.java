@@ -30,8 +30,6 @@ public class Game extends ApplicationAdapter {
 	static double BLOCKS_HORIZONTAL_AXIS = 26;
 	static double BLOCKS_VERTICAL_AXIS = 20;
 	static double PPM = 100;
-	boolean reachedMaxJumpVel = false;
-	double highestJumpVel = 0;
 	boolean goingLeft = false;
 
 	public static void drawSprite(Sprite sprite, double x, double y, int rot) {
@@ -87,45 +85,7 @@ public class Game extends ApplicationAdapter {
 
 		Vector2 vel = player.body.getLinearVelocity();
 		Vector2 pos = player.body.getPosition();
-		float MAX_VELOCITY = 3.5f;
-		float MAX_JUMP_VEL = 5f;
-// apply left impulse, but only if max velocity is not reached yet
-		if (Gdx.input.isKeyPressed(Input.Keys.A) ) {
-			goingLeft = true;
-			if (vel.x > -MAX_VELOCITY) {
-				player.body.applyLinearImpulse(-1.1f, 0, pos.x, pos.y, true);
-			}
-		}
-// apply right impulse, but only if max velocity is not reached yet
-		if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-			goingLeft = false;
-			if (vel.x < MAX_VELOCITY) {
-				player.body.applyLinearImpulse(1.1f, 0, pos.x, pos.y, true);
-			}
-		}
-		if (Math.abs(player.body.getLinearVelocity().x) > 0) {
-			player.body.applyLinearImpulse(-player.body.getLinearVelocity().x/10,0f,pos.x,pos.y,true);
-		}
-		if (reachedMaxJumpVel) {
-			if (player.body.getLinearVelocity().y == 0) {
-				reachedMaxJumpVel = false;
-				highestJumpVel = 0;
-			}
-		}
-		if (player.body.getLinearVelocity().y >= MAX_JUMP_VEL) {
-			reachedMaxJumpVel = true;
-		}
-		if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-			if (!reachedMaxJumpVel && player.body.getLinearVelocity().y >= 0) {
-				player.body.applyLinearImpulse(0, 1.1f, pos.x, pos.y, true);
-			}
-		}
-		if (player.body.getLinearVelocity().y < highestJumpVel) {
-			reachedMaxJumpVel = true;
-		}
-		if (player.body.getLinearVelocity().y > highestJumpVel) {
-			highestJumpVel = player.body.getLinearVelocity().y;
-		}
+
 		ScreenUtils.clear(1, 0, 0, 1);
 		world.step(1/60f, 6, 2);
 		camera.position.x = player.body.getPosition().x;
@@ -150,18 +110,9 @@ public class Game extends ApplicationAdapter {
 			batch.draw(currentTexture, (float) xPos, (float) yPos, (float) xSize, (float) ySize);
 		}
 		batch.end();
-		player.renderSlots();
-		// You know the rest...
-		batch.begin();
-		if (goingLeft) {
-			drawSprite(new Sprite(new Texture("Images/Player/player_left.png")),playerPos.x,playerPos.y);
-		} else {
-			drawSprite(new Sprite(new Texture("Images/Player/player_right.png")),playerPos.x,playerPos.y);
-		}
-		batch.end();
-		debugRenderer.render(world, camera.combined);
 
-		player.renderEquipped();
+		player.update();
+		debugRenderer.render(world, camera.combined);
 	}
 
 	@Override
