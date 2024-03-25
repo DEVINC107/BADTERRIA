@@ -79,7 +79,8 @@ public class TerrainGenerator {
     public static double currentElevation = 0;
 
     public static void generatePlainsTerrain() {
-        final int TREE_GENERATE_FREQUENCY = 10; // 0 to 100
+        final int TREE_GENERATE_FREQUENCY = 8; // 0 to 100
+        final int Flower_GENERATE_FREQUENCY = 18; // 0 to 100
 
         int generateLength = 15;
         if (MAP_LENGTH/2 - currentX < generateLength) {
@@ -91,6 +92,9 @@ public class TerrainGenerator {
 
         for (int x = startX; x <= endX; x++) {
             int currentHeight = Math.round((float) currentElevation);
+            if (TUtility.getRandomInt(1, 100) <= Flower_GENERATE_FREQUENCY) {
+                new CreateBlock("Flower", new Vector2(x, currentHeight + 1));
+            }
             if (TUtility.getRandomInt(1, 100) <= TREE_GENERATE_FREQUENCY) {
                 generateTree(new Vector2(x, currentHeight + 1));
             }
@@ -195,6 +199,7 @@ public class TerrainGenerator {
         final int MAX_HILL_HEIGHT = 12;
         final int MAX_FLAT_LENGTH = 5;
         final int TREE_GENERATE_FREQUENCY = 4; // 0 to 100
+        final int Flower_GENERATE_FREQUENCY = 8; // 0 to 100
 
         boolean targetReached = false;
         int targetHillHeight = TUtility.getRandomInt(0, MAX_HILL_HEIGHT);
@@ -212,6 +217,9 @@ public class TerrainGenerator {
 
         for (int x = startX; x <= endX; x++) {
             int currentHeight = Math.round((float) currentElevation);
+            if (TUtility.getRandomInt(1, 100) <= Flower_GENERATE_FREQUENCY) {
+                new CreateBlock("Flower", new Vector2(x, currentHeight + 1));
+            }
             if (TUtility.getRandomInt(1, 100) <= TREE_GENERATE_FREQUENCY) {
                 generateTree(new Vector2(x, currentHeight + 1));
             }

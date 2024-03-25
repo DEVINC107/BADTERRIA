@@ -8,17 +8,30 @@ import com.mygdx.game.TUtility;
 public class Block {
     private String name;
     private int health;
+    private boolean destroyable;
     float xSize = 0.5f;
     float ySize = 0.5f;
 
     public Block(String name, Vector2 position) {
         this.name = name;
-        this.health = TUtility.getInitialBlockHealth(name);
+        int blockHealth = TUtility.getInitialBlockHealth(name);
+        if (blockHealth != -1) {
+            this.health = blockHealth;
+            destroyable = true;
+        } else {
+            this.health = -1;
+            destroyable = false;
+        }
         BlockTracker.setPosition(this, position);
     }
 
-    public void takeDamage(int damage) {
-        health -= damage;
+    //returns true if damage is successfully dealt
+    public boolean takeDamage(int damage) {
+        if (destroyable) {
+            health -= damage;
+            return true;
+        }
+        return false;
     }
     public void setCollision(Vector2 position, World world) {
         // creates collisions somehow idk

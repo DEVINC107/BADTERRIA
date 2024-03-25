@@ -4,3 +4,4 @@ Stone,Default
 Wood,Default
 Leaves,Noncollidable
 Water,Noncollidable
+Flower,Noncollidable

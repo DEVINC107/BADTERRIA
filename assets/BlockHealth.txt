@@ -1,3 +1,4 @@
 Grass,50
 Dirt,100
 Stone,300
+Flower,20
