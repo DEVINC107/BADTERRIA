@@ -32,14 +32,14 @@ public class Player extends Entity {
         Body body = Game.world.createBody(bodyDef);
         this.body = body;
         PolygonShape box = new PolygonShape();
-        box.setAsBox(0.48f, 0.75f, new Vector2(0,0.25f),0);
+        box.setAsBox(0.45f, 0.75f, new Vector2(0,0.25f),0);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = box;
         fixtureDef.density = 0f;
         fixtureDef.friction = 0f;
         fixtureDef.restitution = 0f;
         CircleShape cShape = new CircleShape();
-        cShape.setRadius(0.49f);
+        cShape.setRadius(0.47f);
         cShape.setPosition(new Vector2(0,-0.5f));
         FixtureDef circle = new FixtureDef();
         circle.shape = cShape;

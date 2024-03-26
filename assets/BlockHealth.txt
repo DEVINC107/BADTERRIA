@@ -1,4 +1,6 @@
 Grass,50
 Dirt,100
+Wood,200
 Stone,300
-Flower,20
+Flower,10
+Leaves,30
