@@ -73,7 +73,7 @@ public class TerrainGenerator {
     }
 
     private static final int MAP_LENGTH = 200;
-    private static final int MAP_HEIGHT = 10;
+    private static final int MAP_HEIGHT = 20;
     private static final int DIRT_LENGTH = 3;
 
     public static double currentElevation = 0;
@@ -267,14 +267,14 @@ public class TerrainGenerator {
     public static void generateTerrain() {
         currentX = -MAP_LENGTH/2;
         while (currentX < MAP_LENGTH/2) {
-            int random = TUtility.getRandomInt(1, 1000);
+            int random = TUtility.getRandomInt(1, 2000);
             if (random < 300) {
                 generateHillsTerrain();
             } else if (random < 600) {
                 generatePlainsTerrain();
             } else if (random <= 800) {
                 generateMountainsTerrain();
-            } else if (random <= 1000) {
+            } else if (random <= 2000) {
                 generateLakeTerrain();
             }
         }

@@ -12,8 +12,8 @@ public class Block {
     float xSize = 0.5f;
     float ySize = 0.5f;
     private Body groundBody;
-    private PolygonShape groundBox;
     private Fixture fixture;
+    private Boolean isDestroyed;
 
     public Block(String name, Vector2 position) {
         this.name = name;
@@ -24,22 +24,24 @@ public class Block {
         if (blockHealth != -1) {
             this.health = blockHealth;
             destroyable = true;
-            System.out.println(blockHealth);
         } else {
             this.health = -1;
             destroyable = false;
         }
         groundBody = null;
-        groundBox = null;
         fixture = null;
+        isDestroyed = false;
         BlockTracker.setPosition(this, position);
     }
 
     public void destroyBlock() {
+        isDestroyed = true;
         if (groundBody != null && fixture != null) {
             groundBody.destroyFixture(fixture);
         }
+        Vector2 blockPos = BlockTracker.getBlockPosition(this);
         BlockTracker.removeBlock(this);
+        BlockTracker.updateSurroundingBlocks(blockPos);
     }
 
     //returns true if damage is successfully dealt
@@ -59,7 +61,7 @@ public class Block {
         groundBodyDef.type = BodyDef.BodyType.StaticBody;
         groundBodyDef.position.set(position);
         groundBody = world.createBody(groundBodyDef);
-        groundBox = new PolygonShape();
+        PolygonShape groundBox = new PolygonShape();
         groundBox.setAsBox(xSize, ySize);
         fixture = groundBody.createFixture(groundBox,0);
         groundBox.dispose();
@@ -71,5 +73,12 @@ public class Block {
 
     public String getName() {
         return name;
+    }
+    public Boolean isDestroyed() {
+        return isDestroyed;
+    }
+
+    public void updateBlock() {
+
     }
 }

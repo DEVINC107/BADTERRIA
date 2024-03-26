@@ -56,4 +56,24 @@ public class BlockTracker {
     public static boolean hasBlockAtPosition(Vector2 pos) {
         return getBlocksAtPosition(pos).size() > 0;
     }
+    public static void updateSurroundingBlocks(Vector2 pos) {
+        Vector2 up = new Vector2(pos.x, pos.y + 1);
+        Vector2 down = new Vector2(pos.x, pos.y - 1);
+        Vector2 right = new Vector2(pos.x + 1, pos.y);
+        Vector2 left = new Vector2(pos.x - 1, pos.y);
+
+        ArrayList<Block> blocksToUpdate = new ArrayList<>();
+
+        for (HashMap.Entry<Block, Vector2> entry : blockPositions.entrySet()) {
+            Block currentBlock = entry.getKey();
+            Vector2 currentPos = entry.getValue();
+            if (currentPos.equals(up) || currentPos.equals(down) || currentPos.equals(left) || currentPos.equals(right) || currentPos.equals(pos)) {
+                blocksToUpdate.add(currentBlock);
+            }
+        }
+
+        for (int i = 0; i < blocksToUpdate.size(); i++) {
+            blocksToUpdate.get(i).updateBlock();
+        }
+    }
 }

@@ -10,6 +10,8 @@ public class CreateBlock {
             new DefaultBlock(blockName, position);
         } else if (blockType.equals("Noncollidable")) {
             new NoncollidableBlock(blockName, position);
+        } else if (blockType.equals("Liquid")) {
+            new LiquidBlock(blockName, position);
         }
     }
 }

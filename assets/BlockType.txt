@@ -3,5 +3,5 @@ Dirt,Default
 Stone,Default
 Wood,Default
 Leaves,Noncollidable
-Water,Noncollidable
+Water,Liquid
 Flower,Noncollidable
