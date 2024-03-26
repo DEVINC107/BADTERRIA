@@ -24,7 +24,6 @@ public class Block {
         if (blockHealth != -1) {
             this.health = blockHealth;
             destroyable = true;
-            System.out.println(blockHealth);
         } else {
             this.health = -1;
             destroyable = false;

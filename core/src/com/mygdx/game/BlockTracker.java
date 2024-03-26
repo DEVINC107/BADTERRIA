@@ -41,13 +41,22 @@ public class BlockTracker {
         return blocksAtPos;
     }
 
-    public static void raycast(Vector2 origin, Vector2 pos) {
+    public static Block raycast(Vector2 origin, Vector2 pos) {
         origin = TUtility.roundVec2(origin);
         pos = TUtility.roundVec2(pos);
-        int deltaY = (int) (pos.y-origin.y);
-        int deltaX = (int) (pos.x-origin.x);
-        int slope = deltaY/deltaX;
-        //int remX =
+        float deltaY = (pos.y-origin.y);
+        float deltaX = (pos.x-origin.x);
+        double hyp = Math.round(Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2)));
+        for (int i = 0; i <= hyp; i ++) {
+            int x = (int) Math.round(origin.x + (deltaX/hyp) * i);
+            int y = (int) Math.round(origin.y + (deltaY/hyp) * i);
+            System.out.println(x + " " + y);
+            if (BlockTracker.hasBlockAtPosition(new Vector2(x,y))) {
+                System.out.println("FOUND BLOCK");
+                return BlockTracker.getBlocksAtPosition(new Vector2(x, y)).get(0);
+            }
+        }
+        return null;
     }
 
     public static HashMap<Block, Vector2> getAllBlockPositions() {
