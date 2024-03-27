@@ -80,7 +80,7 @@ public class BlockTracker {
         }
 
         for (int i = 0; i < blocksToUpdate.size(); i++) {
-            blocksToUpdate.get(i).updateBlock();
+            blocksToUpdate.get(i).beginUpdating();
         }
     }
 }
