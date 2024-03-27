@@ -17,7 +17,7 @@ public class LiquidBlock extends Block {
     public void updateBlock() {
         Block currentBlock = this;
         String sourceBlockName = currentBlock.getName().substring(0, currentBlock.getName().length() - 2);
-        String nextBlockName = sourceBlockName + Integer.parseInt(currentBlock.getName().substring(currentBlock.getName().length() - 1));
+        String nextBlockName = sourceBlockName + (Integer.parseInt(currentBlock.getName().substring(currentBlock.getName().length() - 1)) - 1);
         Vector2 currentPos = BlockTracker.getBlockPosition(currentBlock);
         Vector2 left = new Vector2(currentPos.x - 1, currentPos.y);
         Vector2 right = new Vector2(currentPos.x + 1, currentPos.y);

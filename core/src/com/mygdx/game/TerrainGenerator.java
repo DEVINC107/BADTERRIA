@@ -126,7 +126,7 @@ public class TerrainGenerator {
             int currentWaterDepth = Math.min(Math.min(x - startX, endX - x), MAX_WATER_DEPTH);
 
             for (int y = currentHeight; y > currentHeight - currentWaterDepth; y--) {
-                new CreateBlock("Water", new Vector2(x, y));
+                new CreateBlock("Water6", new Vector2(x, y));
             }
             currentHeight -= currentWaterDepth;
             for (int y = currentHeight; y > currentHeight - DIRT_LENGTH; y--) {
