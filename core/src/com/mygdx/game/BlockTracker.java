@@ -50,9 +50,7 @@ public class BlockTracker {
         for (int i = 0; i <= hyp; i ++) {
             int x = (int) Math.round(origin.x + (deltaX/hyp) * i);
             int y = (int) Math.round(origin.y + (deltaY/hyp) * i);
-            System.out.println(x + " " + y);
             if (BlockTracker.hasBlockAtPosition(new Vector2(x,y))) {
-                System.out.println("FOUND BLOCK");
                 return BlockTracker.getBlocksAtPosition(new Vector2(x, y)).get(0);
             }
         }
