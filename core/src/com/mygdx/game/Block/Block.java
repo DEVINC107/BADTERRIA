@@ -3,6 +3,7 @@ package com.mygdx.game.Block;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.BlockTracker;
+import com.mygdx.game.Game;
 import com.mygdx.game.TUtility;
 
 public class Block {
@@ -80,5 +81,8 @@ public class Block {
 
     public void updateBlock() {
 
+    }
+    public void beginUpdating() {
+        updateBlock();
     }
 }

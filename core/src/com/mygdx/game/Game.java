@@ -19,6 +19,7 @@ import com.mygdx.game.Entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Timer;
 import java.util.Vector;
 
 
@@ -33,6 +34,7 @@ public class Game extends ApplicationAdapter {
 	public static double BLOCKS_VERTICAL_AXIS = 20;
 	public static double PPM = 100;
 	boolean goingLeft = false;
+	public static HashMap<Block, Long> blockUpdateTimes = new HashMap<>();
 
 
 
@@ -110,6 +112,29 @@ public class Game extends ApplicationAdapter {
 				blocksAtPos.get(0).takeDamage(10);
 			}
 		}
+
+		long currentTimeMillis = System.currentTimeMillis();
+		ArrayList<Block> readyToUpdate = new ArrayList<>();
+
+		for (HashMap.Entry<Block, Long> entry : blockUpdateTimes.entrySet()) {
+			Block currentBlock = entry.getKey();
+			long updateTime = entry.getValue();
+			if (currentTimeMillis >= updateTime) {
+				readyToUpdate.add(currentBlock);
+			}
+		}
+
+		for (int i = readyToUpdate.size() - 1; i >= 0; i--) {
+			Block currentBlock = readyToUpdate.get(i);
+			if (!currentBlock.isDestroyed()) {
+				currentBlock.updateBlock();
+			}
+			blockUpdateTimes.remove(currentBlock);
+		}
+	}
+
+	public static void addToBlockUpdates(Block block, double timeBeforeUpdate) {
+		blockUpdateTimes.put(block, Math.round(System.currentTimeMillis() + timeBeforeUpdate * 1000));
 	}
 
 	@Override
