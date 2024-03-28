@@ -107,17 +107,6 @@ public class Game extends ApplicationAdapter {
 		player.update();
 		debugRenderer.render(world, camera.combined);
 
-		//block breaking
-		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-			Vector2 mousePos = TUtility.getCursor();
-			ArrayList<Block> blocksAtPos = BlockTracker.getBlocksAtPosition(TUtility.getRoundedVector2(mousePos));
-			System.out.println(TUtility.getRoundedVector2(mousePos));
-
-			if (blocksAtPos.size() > 0) {
-				blocksAtPos.get(0).takeDamage(10);
-			}
-		}
-
 		long currentTimeMillis = System.currentTimeMillis();
 		ArrayList<Block> readyToUpdate = new ArrayList<>();
 

@@ -1,6 +1,7 @@
 package com.mygdx.game.Entity;
 
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.Block.Block;
@@ -16,6 +17,7 @@ import com.mygdx.game.Item.Pickaxe;
 import com.mygdx.game.TUtility;
 
 import java.io.IOError;
+import java.util.ArrayList;
 
 public class Player extends Entity {
     public Body body;
@@ -54,37 +56,49 @@ public class Player extends Entity {
         body.createFixture(circle);
         body.createFixture(fixtureDef);
     }
-    double precision = 10;
-    double angle = 90;
+    double precision = 5;
+    double angle = 20;
+    int maxRange = 5;
     public void smartCursor() {
         Vector2 cursor = TUtility.getCursor();
         Vector2 pos = body.getPosition();
-        float radius = (float) Math.sqrt(Math.pow(cursor.x-pos.x,2) + Math.pow(cursor.y-pos.y,2));
-        float closestDistance = -1;
-        Block closestBlock = null;
         float xDiff = cursor.x - pos.x;
         float yDiff = cursor.y - pos.y;
+        float radius = (float) Math.sqrt(Math.pow(cursor.x-pos.x,2) + Math.pow(cursor.y-pos.y,2));
+
+        if (radius > maxRange) {
+            float cSquared = (float) Math.pow(radius,2);
+            float xSign = Math.signum(xDiff);
+            float ySign = Math.signum(yDiff);
+            xDiff = xSign * (float) (Math.pow(xDiff,2)/cSquared)*maxRange;
+            yDiff = ySign * (float) (Math.pow(yDiff,2)/cSquared)*maxRange;
+            radius = maxRange;
+        }
+
+        float closestDistance = Integer.MAX_VALUE;
+        Block closestBlock = null;
         float degOffset = (float) Math.toDegrees(Math.acos(Math.abs(xDiff)/radius));
         System.out.println(degOffset);
         if (xDiff < 0 && yDiff > 0) {
-            degOffset = 180 + degOffset;
-        } else if (xDiff < 0 && yDiff < 0) {
             degOffset = 180 - degOffset;
-        } else if (xDiff > 0 && yDiff < 0) {
-            degOffset = 360 + degOffset;
+        } else if (xDiff <= 0 && yDiff <= 0) {
+            degOffset = 180 + degOffset;
+        } else if (xDiff >= 0 && yDiff <= 0) {
+            degOffset = -degOffset;
         }
         for (float deg = (float) -angle/2; deg <= angle/2; deg += angle/precision) {
             float rad = (float) Math.toRadians(deg + degOffset);
             float x = pos.x + (float) Math.cos(rad) * radius;
             float y = pos.y + (float) Math.sin(rad) * radius;
-            TUtility.drawSprite(new Sprite(new Texture("Images/SmartCursorSelect.png")),x,y);
             Block result = BlockTracker.raycast(pos,new Vector2(x, y));
+            TUtility.drawSprite(new Sprite(new Texture("Images/SmartCursorSelect.png")),x,y);
             if (result == null) {
                 continue;
             }
             Vector2 blockPos = BlockTracker.getBlockPosition(result);
             float distance = (float) Math.sqrt(Math.pow(pos.x-blockPos.x,2) + Math.pow(pos.y-blockPos.y,2));
-            if (distance > closestDistance) {
+            float cursorDistance = (float) Math.sqrt(Math.pow(cursor.x-blockPos.x,2) + Math.pow(cursor.y-blockPos.y,2));
+            if (distance < closestDistance) {
                 closestDistance = distance;
                 closestBlock = result;
             }
@@ -94,7 +108,14 @@ public class Player extends Entity {
         }
         Vector2 blockPos = BlockTracker.getBlockPosition(closestBlock);
         TUtility.drawSprite(new Sprite(new Texture("Images/SmartCursorSelect.png")),blockPos.x,blockPos.y);
-        System.out.println(BlockTracker.getBlockPosition(closestBlock));
+        //System.out.println(BlockTracker.getBlockPosition(closestBlock));
+        //block breaking
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+            ArrayList<Block> blocksAtPos = BlockTracker.getBlocksAtPosition(blockPos);
+            if (blocksAtPos.size() > 0) {
+                blocksAtPos.get(0).takeDamage(10);
+            }
+        }
     }
     public void renderSlots() {
         float pps = (float) (Gdx.graphics.getWidth()/2)/numSlots;
