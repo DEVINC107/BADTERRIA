@@ -47,7 +47,7 @@ public class BlockTracker {
         float deltaY = (pos.y-origin.y);
         float deltaX = (pos.x-origin.x);
         double hyp = Math.round(Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2)));
-        for (int i = 0; i <= hyp; i ++) {
+        for (float i = 0; i <= hyp; i += 1f) {
             int x = (int) Math.round(origin.x + (deltaX/hyp) * i);
             int y = (int) Math.round(origin.y + (deltaY/hyp) * i);
             if (BlockTracker.hasBlockAtPosition(new Vector2(x,y))) {
