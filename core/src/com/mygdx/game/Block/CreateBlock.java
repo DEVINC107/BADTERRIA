@@ -12,6 +12,8 @@ public class CreateBlock {
             new NoncollidableBlock(blockName, position);
         } else if (blockType.equals("Liquid")) {
             new LiquidBlock(blockName, position);
+        } else if (blockType.equals("TNT")) {
+            new TNT(blockName, position);
         }
     }
 }

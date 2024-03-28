@@ -124,4 +124,8 @@ public class TUtility {
 
         }
     }
+
+    public static double getMagnitude(Vector2 vec1, Vector2 vec2) {
+        return Math.sqrt(Math.pow(vec1.x - vec2.x, 2) + Math.pow(vec1.y - vec2.y, 2));
+    }
 }

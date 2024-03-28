@@ -15,8 +15,9 @@ public class Block {
     private Body groundBody;
     private Fixture fixture;
     private Boolean isDestroyed;
+    public String blockType;
 
-    public Block(String name, Vector2 position) {
+    public Block(String name, Vector2 position, String blockType) {
         this.name = name;
         int blockHealth = -1;
         if (TUtility.getData("BlockHealth.txt", name) != null) {
@@ -29,6 +30,7 @@ public class Block {
             this.health = -1;
             destroyable = false;
         }
+        this.blockType = blockType;
         groundBody = null;
         fixture = null;
         isDestroyed = false;
@@ -84,5 +86,8 @@ public class Block {
     }
     public void beginUpdating() {
         updateBlock();
+    }
+    public String getBlockType() {
+        return blockType;
     }
 }
