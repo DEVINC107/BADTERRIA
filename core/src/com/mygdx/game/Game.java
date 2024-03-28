@@ -14,6 +14,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.mygdx.game.Block.CreateBlock;
 import com.mygdx.game.Block.DefaultBlock;
 import com.mygdx.game.Entity.Player;
 
@@ -66,6 +67,7 @@ public class Game extends ApplicationAdapter {
 		blockTextures.put("Water4", new Texture("Images/Blocks/water4.png"));
 		blockTextures.put("Water5", new Texture("Images/Blocks/water5.png"));
 		blockTextures.put("Water6", new Texture("Images/Blocks/water6.png"));
+		blockTextures.put("TNT", new Texture("Images/Blocks/tnt.png"));
 
 		//starts some stuff
 		TerrainGenerator.setTreeData();
@@ -106,6 +108,17 @@ public class Game extends ApplicationAdapter {
 
 		player.update();
 		debugRenderer.render(world, camera.combined);
+
+		//block breaking
+		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+			Vector2 mousePos = TUtility.getCursor();
+			ArrayList<Block> blocksAtPos = BlockTracker.getBlocksAtPosition(TUtility.getRoundedVector2(mousePos));
+
+			if (blocksAtPos.size() > 0) {
+				//blocksAtPos.get(0).takeDamage(1000);
+			}
+			new CreateBlock("TNT", TUtility.getRoundedVector2(mousePos));
+		}
 
 		long currentTimeMillis = System.currentTimeMillis();
 		ArrayList<Block> readyToUpdate = new ArrayList<>();

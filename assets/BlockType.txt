@@ -10,3 +10,4 @@ Water4,Liquid
 Water5,Liquid
 Water6,Liquid
 Flower,Noncollidable
+TNT,TNT
