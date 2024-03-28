@@ -65,7 +65,7 @@ public class Player extends Entity {
         float xDiff = cursor.x - pos.x;
         float yDiff = cursor.y - pos.y;
         float degOffset = (float) Math.toDegrees(Math.acos(Math.abs(xDiff)/radius));
-        System.out.println(degOffset);
+        //System.out.println(degOffset);
         if (xDiff < 0 && yDiff > 0) {
             degOffset = 180 + degOffset;
         } else if (xDiff < 0 && yDiff < 0) {
@@ -94,7 +94,7 @@ public class Player extends Entity {
         }
         Vector2 blockPos = BlockTracker.getBlockPosition(closestBlock);
         TUtility.drawSprite(new Sprite(new Texture("Images/SmartCursorSelect.png")),blockPos.x,blockPos.y);
-        System.out.println(BlockTracker.getBlockPosition(closestBlock));
+        //System.out.println(BlockTracker.getBlockPosition(closestBlock));
     }
     public void renderSlots() {
         float pps = (float) (Gdx.graphics.getWidth()/2)/numSlots;

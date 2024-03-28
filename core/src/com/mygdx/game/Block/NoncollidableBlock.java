@@ -8,7 +8,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class NoncollidableBlock extends Block {
     public NoncollidableBlock(String blockName, Vector2 position) {
-        super(blockName, position);
+        super(blockName, position, "Noncollidable");
     }
     public void setCollision(Vector2 position, World world) {
         //empty so no collisions :)

@@ -114,7 +114,7 @@ public class Game extends ApplicationAdapter {
 			System.out.println(TUtility.getRoundedVector2(mousePos));
 
 			if (blocksAtPos.size() > 0) {
-				blocksAtPos.get(0).takeDamage(10);
+				blocksAtPos.get(0).takeDamage(1000);
 			}
 		}
 
