@@ -1,2 +1,2 @@
 Player,100
-demon,200
+Pig,100,10

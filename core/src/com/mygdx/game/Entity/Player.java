@@ -20,7 +20,6 @@ import java.io.IOError;
 import java.util.ArrayList;
 
 public class Player extends Entity {
-    public Body body;
     int numSlots = 9;
     boolean reachedMaxJumpVel = false;
     double highestJumpVel = 0;
@@ -50,7 +49,7 @@ public class Player extends Entity {
         FixtureDef circle = new FixtureDef();
         circle.shape = cShape;
         circle.friction = 0f;
-
+        setBody(body);
         inventory[0] = new Pickaxe("WoodPickaxe");
 
         body.createFixture(circle);

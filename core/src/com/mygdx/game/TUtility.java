@@ -5,6 +5,10 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.mygdx.game.Entity.Player;
 
 import java.io.BufferedReader;
@@ -22,6 +26,20 @@ public class TUtility {
 
     }
 
+    public static Body createBox(float x, float y) {
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(0, 40);
+        Body body = Game.world.createBody(bodyDef);
+        PolygonShape box = new PolygonShape();
+        box.setAsBox(x, y);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = box;
+        fixtureDef.density = 0f;
+        fixtureDef.friction = 0f;
+        fixtureDef.restitution = 0f;
+        return body;
+    }
     public static String[] getData(String file, String token) {
         ArrayList<String> lines = new ArrayList<String>();
         try {
