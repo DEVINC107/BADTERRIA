@@ -3,6 +3,8 @@ package com.mygdx.game.Entity;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.mygdx.game.TUtility;
 
+import java.io.File;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
 
 public class Entity {
@@ -36,6 +38,6 @@ public class Entity {
         return health;
     }
     public void update() {
-
+        TUtility.drawSprite(entityId,body.getPosition().x,body.getPosition().y);
     }
 }

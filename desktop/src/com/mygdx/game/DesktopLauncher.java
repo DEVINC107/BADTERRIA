@@ -9,7 +9,7 @@ import com.mygdx.game.Game;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-		config.setForegroundFPS(60);
+		config.setForegroundFPS(120);
 		config.setTitle("BadTerraria");
 		new Lwjgl3Application(new Game(), config);
 	}

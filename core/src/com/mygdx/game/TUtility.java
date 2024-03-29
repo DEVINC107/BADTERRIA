@@ -2,6 +2,7 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -11,10 +12,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.mygdx.game.Entity.Player;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -89,6 +87,22 @@ public class TUtility {
         sprite.setOrigin((float)xSize/2,(float)ySize/2);
         sprite.setRotation(rot);
         sprite.draw(batch);
+    }
+
+    public static void drawSprite(String spriteId, double x, double y) {
+        File file = new File("Images");
+        String[] directories = file.list(new FilenameFilter() {
+            @Override
+            public boolean accept(File current, String name) {
+                return new File(current, name).isDirectory();
+            }
+        });
+        for (String directory : directories) {
+            File f = new File("Images/" + directory + "/" + spriteId);
+            if (f.exists()) {
+                drawSprite(new Sprite(new Texture(f.getPath())),x,y);
+            }
+        }
     }
 
     public static Vector2 meterToPixel(Vector2 meters) {

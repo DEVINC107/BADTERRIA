@@ -12,7 +12,7 @@ public class RenewableMob extends Entity{
     public RenewableMob (String entityId) {
         super(entityId);
         String[] data = TUtility.getData("Entity.txt",entityId);
-        this.spawnsEvery = Float.parseFloat(data[2]);
+        this.spawnsEvery = Float.parseFloat(data[1]);
     }
 
     public float getSpawnsEvery() {

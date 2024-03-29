@@ -24,6 +24,8 @@ public class Player extends Entity {
     boolean reachedMaxJumpVel = false;
     double highestJumpVel = 0;
     Item[] inventory = new Item[numSlots];
+    float lastSmartCursorX;
+    float lastSmartCursorY;
     int equipped = 0;
     private int dir = 0; // 0 = left, 1 = right
     public int getDir() {
@@ -58,7 +60,16 @@ public class Player extends Entity {
     double precision = 5;
     double angle = 20;
     int maxRange = 5;
+    long lastTick = 0;
+    Vector2 blockPos;
     public void smartCursor() {
+        if (blockPos != null) {
+            TUtility.drawSprite(new Sprite(new Texture("Images/SmartCursorSelect.png")), blockPos.x, blockPos.y);
+        }
+        if (System.currentTimeMillis() - lastTick < 200) {
+            return;
+        }
+        lastTick = System.currentTimeMillis();
         Vector2 cursor = TUtility.getCursor();
         Vector2 pos = body.getPosition();
         float xDiff = cursor.x - pos.x;
@@ -77,7 +88,6 @@ public class Player extends Entity {
         float closestDistance = Integer.MAX_VALUE;
         Block closestBlock = null;
         float degOffset = (float) Math.toDegrees(Math.acos(Math.abs(xDiff)/radius));
-        System.out.println(degOffset);
         if (xDiff < 0 && yDiff > 0) {
             degOffset = 180 - degOffset;
         } else if (xDiff <= 0 && yDiff <= 0) {
@@ -90,13 +100,11 @@ public class Player extends Entity {
             float x = pos.x + (float) Math.cos(rad) * radius;
             float y = pos.y + (float) Math.sin(rad) * radius;
             Block result = BlockTracker.raycast(pos,new Vector2(x, y));
-            TUtility.drawSprite(new Sprite(new Texture("Images/SmartCursorSelect.png")),x,y);
             if (result == null) {
                 continue;
             }
             Vector2 blockPos = BlockTracker.getBlockPosition(result);
             float distance = (float) Math.sqrt(Math.pow(pos.x-blockPos.x,2) + Math.pow(pos.y-blockPos.y,2));
-            float cursorDistance = (float) Math.sqrt(Math.pow(cursor.x-blockPos.x,2) + Math.pow(cursor.y-blockPos.y,2));
             if (distance < closestDistance) {
                 closestDistance = distance;
                 closestBlock = result;
@@ -105,8 +113,10 @@ public class Player extends Entity {
         if (closestBlock == null) {
             return;
         }
-        Vector2 blockPos = BlockTracker.getBlockPosition(closestBlock);
-        TUtility.drawSprite(new Sprite(new Texture("Images/SmartCursorSelect.png")),blockPos.x,blockPos.y);
+        lastSmartCursorX = cursor.x;
+        lastSmartCursorY = cursor.y;
+        blockPos = BlockTracker.getBlockPosition(closestBlock);
+        //TUtility.drawSprite(new Sprite(new Texture("Images/SmartCursorSelect.png")),blockPos.x,blockPos.y);
         //System.out.println(BlockTracker.getBlockPosition(closestBlock));
         //block breaking
         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
@@ -153,7 +163,7 @@ public class Player extends Entity {
     }
 
     public void update() {
-        Game.batch.begin();
+        //Game.batch.begin();
         Vector2 vel = body.getLinearVelocity();
         Vector2 pos = body.getPosition();
         float MAX_VELOCITY = 3.5f;
@@ -204,6 +214,6 @@ public class Player extends Entity {
         smartCursor();
         renderSlots();
         renderEquipped();
-        Game.batch.end();
+        //Game.batch.end();
     }
 }

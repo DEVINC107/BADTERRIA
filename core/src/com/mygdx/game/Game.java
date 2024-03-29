@@ -1,7 +1,9 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.utils.PerformanceCounter;
 import com.mygdx.game.Block.Block;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -16,7 +18,9 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mygdx.game.Block.CreateBlock;
 import com.mygdx.game.Block.DefaultBlock;
+import com.mygdx.game.Entity.Entity;
 import com.mygdx.game.Entity.Player;
+import com.mygdx.game.Entity.Slime;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,12 +40,13 @@ public class Game extends ApplicationAdapter {
 	public static double PPM = 100;
 	boolean goingLeft = false;
 	public static HashMap<Block, Long> blockUpdateTimes = new HashMap<>();
+	public static PerformanceCounter counter;
 
-
-
+	public static FPSLogger logger = new FPSLogger();
 
 	@Override
 	public void create () {
+		counter = new PerformanceCounter("Game");
 		batch = new SpriteBatch();
 		world = new World(new Vector2(0, -10), true);
 		player = new Player();
@@ -49,8 +54,7 @@ public class Game extends ApplicationAdapter {
 		debugRenderer = new Box2DDebugRenderer();
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, (float) BLOCKS_HORIZONTAL_AXIS,(float) BLOCKS_VERTICAL_AXIS);
-		System.out.println(camera.position);
-
+		new Slime("Pig");
 
 
 		// add block textures
@@ -78,7 +82,7 @@ public class Game extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-
+		//counter.start();
 		Vector2 vel = player.body.getLinearVelocity();
 		Vector2 pos = player.body.getPosition();
 
@@ -104,13 +108,13 @@ public class Game extends ApplicationAdapter {
 			double yPos = (currentPos.y - playerPos.y) * (PPM/yScale) + Gdx.graphics.getHeight() / 2 - ySize / 2;
 			batch.draw(currentTexture, (float) xPos, (float) yPos, (float) xSize, (float) ySize);
 		}
+		Entity.updateEntities();
 		batch.end();
 
-		player.update();
 		debugRenderer.render(world, camera.combined);
 
 		//block breaking
-		if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+		/*if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
 			Vector2 mousePos = TUtility.getCursor();
 			ArrayList<Block> blocksAtPos = BlockTracker.getBlocksAtPosition(TUtility.getRoundedVector2(mousePos));
 
@@ -118,7 +122,7 @@ public class Game extends ApplicationAdapter {
 				//blocksAtPos.get(0).takeDamage(1000);
 			}
 			new CreateBlock("TNT", TUtility.getRoundedVector2(mousePos));
-		}
+		}*/
 
 		long currentTimeMillis = System.currentTimeMillis();
 		ArrayList<Block> readyToUpdate = new ArrayList<>();
@@ -138,6 +142,10 @@ public class Game extends ApplicationAdapter {
 			}
 			blockUpdateTimes.remove(currentBlock);
 		}
+
+		counter.stop();
+		//System.out.println(counter.time);
+		logger.log();
 	}
 
 	public static void addToBlockUpdates(Block block, double timeBeforeUpdate) {
