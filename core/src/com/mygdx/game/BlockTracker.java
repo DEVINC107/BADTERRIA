@@ -33,7 +33,7 @@ public class BlockTracker {
         for (HashMap.Entry<Block, Vector2> entry : blockPositions.entrySet()) {
             Block currentBlock = entry.getKey();
             Vector2 currentPos = entry.getValue();
-            if (currentPos.equals(pos)) {
+            if (Math.abs(pos.x - currentPos.x) < 1 && Math.abs(pos.y - currentPos.y) < 1) {
                 blocksAtPos.add(currentBlock);
             }
         }

@@ -14,6 +14,8 @@ public class CreateBlock {
             new LiquidBlock(blockName, position);
         } else if (blockType.equals("TNT")) {
             new TNT(blockName, position);
+        } else if (blockType.equals("Gravity")) {
+            new GravityBlock(blockName, position);
         }
     }
 }

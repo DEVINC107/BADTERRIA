@@ -161,9 +161,11 @@ public class Player extends Entity {
         super.update();
         //Game.batch.begin();
         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-            ArrayList<Block> blocksAtPos = BlockTracker.getBlocksAtPosition(blockPos);
-            if (blocksAtPos.size() > 0) {
-                blocksAtPos.get(0).takeDamage(10);
+            if (blockPos != null) {
+                ArrayList<Block> blocksAtPos = BlockTracker.getBlocksAtPosition(blockPos);
+                if (blocksAtPos.size() > 0) {
+                    blocksAtPos.get(0).takeDamage(10);
+                }
             }
         }
         Vector2 vel = body.getLinearVelocity();

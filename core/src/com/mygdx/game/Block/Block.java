@@ -36,12 +36,15 @@ public class Block {
         isDestroyed = false;
         BlockTracker.setPosition(this, position);
     }
-
-    public void destroyBlock() {
-        isDestroyed = true;
+    public void removeCollision() {
         if (groundBody != null && fixture != null) {
             groundBody.destroyFixture(fixture);
         }
+    }
+
+    public void destroyBlock() {
+        isDestroyed = true;
+        removeCollision();
         Vector2 blockPos = BlockTracker.getBlockPosition(this);
         BlockTracker.removeBlock(this);
         BlockTracker.updateSurroundingBlocks(blockPos);
@@ -59,6 +62,7 @@ public class Block {
         return false;
     }
     public void setCollision(Vector2 position, World world) {
+        removeCollision();
         // creates collisions somehow idk
         BodyDef groundBodyDef = new BodyDef();
         groundBodyDef.type = BodyDef.BodyType.StaticBody;
