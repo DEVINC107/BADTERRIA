@@ -27,6 +27,7 @@ public class Player extends Entity {
     float lastSmartCursorX;
     float lastSmartCursorY;
     int equipped = 0;
+    int health = 100;
     private int dir = 0; // 0 = left, 1 = right
     public int getDir() {
         return dir;
@@ -157,6 +158,7 @@ public class Player extends Entity {
     }
 
     public void update() {
+        super.update();
         //Game.batch.begin();
         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
             ArrayList<Block> blocksAtPos = BlockTracker.getBlocksAtPosition(blockPos);
@@ -183,9 +185,7 @@ public class Player extends Entity {
                 body.applyLinearImpulse(1.1f, 0, pos.x, pos.y, true);
             }
         }
-        if (Math.abs(body.getLinearVelocity().x) > 0) {
-            body.applyLinearImpulse(-body.getLinearVelocity().x/10,0f,pos.x,pos.y,true);
-        }
+
         if (reachedMaxJumpVel) {
             if (body.getLinearVelocity().y == 0) {
                 reachedMaxJumpVel = false;
@@ -214,6 +214,10 @@ public class Player extends Entity {
         smartCursor();
         renderSlots();
         renderEquipped();
+        for (int i = 0; i < health/10; i ++) {
+            Game.batch.draw(new Texture("Images/Heart.png"),Gdx.graphics.getWidth()-(25*i),Gdx.graphics.getHeight()-25,25,25);
+        }
         //Game.batch.end();
     }
+
 }

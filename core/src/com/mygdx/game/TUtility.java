@@ -36,6 +36,7 @@ public class TUtility {
         fixtureDef.density = 0f;
         fixtureDef.friction = 0f;
         fixtureDef.restitution = 0f;
+        body.createFixture(fixtureDef);
         return body;
     }
     public static String[] getData(String file, String token) {
@@ -98,7 +99,7 @@ public class TUtility {
             }
         });
         for (String directory : directories) {
-            File f = new File("Images/" + directory + "/" + spriteId);
+            File f = new File("Images/" + directory + "/" + spriteId + ".png");
             if (f.exists()) {
                 drawSprite(new Sprite(new Texture(f.getPath())),x,y);
             }

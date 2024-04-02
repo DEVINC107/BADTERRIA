@@ -8,7 +8,7 @@ import java.io.FilenameFilter;
 import java.util.ArrayList;
 
 public class Entity {
-    private String entityId;
+    public String entityId;
     private int health = 0;
     public Body body;
     private static ArrayList<Entity> entities = new ArrayList<>();
@@ -38,6 +38,22 @@ public class Entity {
         return health;
     }
     public void update() {
+        if (Math.abs(body.getLinearVelocity().x) > 0 && body.getLinearVelocity().y <= 0) {
+            body.applyLinearImpulse(-body.getLinearVelocity().x/20,0f,getBody().getPosition().x,getBody().getPosition().y,true);
+        }
         TUtility.drawSprite(entityId,body.getPosition().x,body.getPosition().y);
+    }
+
+    public static Entity getInstance(Body body) {
+        for (Entity entity : entities) {
+            if (entity.getBody() == body) {
+                return entity;
+            }
+        }
+        return null;
+    }
+
+    public void collision(Entity other) {
+
     }
 }

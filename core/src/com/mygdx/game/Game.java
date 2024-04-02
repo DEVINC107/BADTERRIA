@@ -109,6 +109,13 @@ public class Game extends ApplicationAdapter {
 			batch.draw(currentTexture, (float) xPos, (float) yPos, (float) xSize, (float) ySize);
 		}
 		Entity.updateEntities();
+		for (Contact contact : world.getContactList()) {
+			Entity e1 = Entity.getInstance(contact.getFixtureA().getBody());
+			Entity e2 = Entity.getInstance(contact.getFixtureB().getBody());
+			if (e1 != null && e2 != null) {
+				e1.collision(e2);
+			}
+		}
 		batch.end();
 
 		debugRenderer.render(world, camera.combined);
