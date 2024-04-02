@@ -57,8 +57,8 @@ public class Player extends Entity {
         body.createFixture(circle);
         body.createFixture(fixtureDef);
     }
-    double precision = 5;
-    double angle = 20;
+    double precision = 1;
+    double angle = 45;
     int maxRange = 5;
     long lastTick = 0;
     Vector2 blockPos;
@@ -119,12 +119,6 @@ public class Player extends Entity {
         //TUtility.drawSprite(new Sprite(new Texture("Images/SmartCursorSelect.png")),blockPos.x,blockPos.y);
         //System.out.println(BlockTracker.getBlockPosition(closestBlock));
         //block breaking
-        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-            ArrayList<Block> blocksAtPos = BlockTracker.getBlocksAtPosition(blockPos);
-            if (blocksAtPos.size() > 0) {
-                blocksAtPos.get(0).takeDamage(10);
-            }
-        }
     }
     public void renderSlots() {
         float pps = (float) (Gdx.graphics.getWidth()/2)/numSlots;
@@ -164,6 +158,12 @@ public class Player extends Entity {
 
     public void update() {
         //Game.batch.begin();
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+            ArrayList<Block> blocksAtPos = BlockTracker.getBlocksAtPosition(blockPos);
+            if (blocksAtPos.size() > 0) {
+                blocksAtPos.get(0).takeDamage(10);
+            }
+        }
         Vector2 vel = body.getLinearVelocity();
         Vector2 pos = body.getPosition();
         float MAX_VELOCITY = 3.5f;
