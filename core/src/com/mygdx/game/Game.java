@@ -34,7 +34,7 @@ public class Game extends ApplicationAdapter {
 	public static Box2DDebugRenderer debugRenderer;
 	public static OrthographicCamera camera;
 	public static Player player;
-	HashMap<String, Texture> blockTextures;
+	private static HashMap<String, Texture> blockTextures;
 	public static double BLOCKS_HORIZONTAL_AXIS = 26;
 	public static double BLOCKS_VERTICAL_AXIS = 20;
 	public static double PPM = 100;
@@ -108,7 +108,9 @@ public class Game extends ApplicationAdapter {
 			double ySize = currentTexture.getHeight()/yScale;
 			double xPos = (currentPos.x - playerPos.x) * (PPM/xScale) + Gdx.graphics.getWidth() / 2 - xSize / 2;
 			double yPos = (currentPos.y - playerPos.y) * (PPM/yScale) + Gdx.graphics.getHeight() / 2 - ySize / 2;
-			batch.draw(currentTexture, (float) xPos, (float) yPos, (float) xSize, (float) ySize);
+			if (yPos > -100 && yPos < Gdx.graphics.getHeight() + 100 && xPos > -100 && xPos < Gdx.graphics.getWidth() + 100) {
+				batch.draw(currentTexture, (float) xPos, (float) yPos, (float) xSize, (float) ySize);
+			}
 		}
 		Entity.updateEntities();
 		for (Contact contact : world.getContactList()) {
@@ -126,7 +128,8 @@ public class Game extends ApplicationAdapter {
 		//block building
 		if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
 			Vector2 mousePos = TUtility.getCursor();
-			ArrayList<Block> blocksAtPos = BlockTracker.getBlocksAtPosition(TUtility.getRoundedVector2(mousePos));
+			Vector2 roundedMousePos = TUtility.getRoundedVector2(mousePos);
+			ArrayList<Block> blocksAtPos = BlockTracker.getBlocksAtPosition(roundedMousePos);
 			boolean canPlace = true;
 			ArrayList<Block> blocksToRemove = new ArrayList<>();
 			for (int i = 0; i < blocksAtPos.size(); i++) {
@@ -137,7 +140,23 @@ public class Game extends ApplicationAdapter {
 					canPlace = false;
 				}
 			}
-			if (canPlace) {
+			boolean hasSurroundingBlock = false;
+			Vector2[] vecsToCheck = {new Vector2(1, 0), new Vector2(0, 1), new Vector2(-1, 0), new Vector2(0, -1)};
+			for (int i = 0; i < vecsToCheck.length; i++) {
+				ArrayList<Block> blocks = BlockTracker.getBlocksAtPosition(vecsToCheck[i].add(roundedMousePos));
+				for (int x = 0; x < blocks.size(); x++) {
+					Block currentBlock = blocks.get(x);
+					if (!currentBlock.getBlockType().equals("Liquid")) {
+						hasSurroundingBlock = true;
+						break;
+					}
+				}
+
+				if (hasSurroundingBlock) {
+					break;
+				}
+			}
+			if (canPlace && hasSurroundingBlock) {
 				for (int i = 0; i < blocksToRemove.size(); i++) {
 					blocksToRemove.get(i).destroyBlock();
 				}
@@ -171,6 +190,18 @@ public class Game extends ApplicationAdapter {
 
 	public static void addToBlockUpdates(Block block, double timeBeforeUpdate) {
 		blockUpdateTimes.put(block, Math.round(System.currentTimeMillis() + timeBeforeUpdate * 1000));
+	}
+
+	public static Texture getBlockTexture(String name) {
+		return blockTextures.get(name);
+	}
+
+	public static World getWorld() {
+		return world;
+	}
+
+	public static double getPPM() {
+		return PPM;
 	}
 
 	@Override

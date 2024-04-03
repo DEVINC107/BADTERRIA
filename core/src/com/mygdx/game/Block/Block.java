@@ -3,6 +3,7 @@ package com.mygdx.game.Block;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.BlockTracker;
+import com.mygdx.game.DroppedItem;
 import com.mygdx.game.Game;
 import com.mygdx.game.TUtility;
 
@@ -39,6 +40,8 @@ public class Block {
     public void removeCollision() {
         if (groundBody != null && fixture != null) {
             groundBody.destroyFixture(fixture);
+            groundBody = null;
+            fixture = null;
         }
     }
 
@@ -48,6 +51,7 @@ public class Block {
         Vector2 blockPos = BlockTracker.getBlockPosition(this);
         BlockTracker.removeBlock(this);
         BlockTracker.updateSurroundingBlocks(blockPos);
+        new DroppedItem(name, blockPos);
     }
 
     //returns true if damage is successfully dealt
