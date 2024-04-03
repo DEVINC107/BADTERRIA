@@ -95,6 +95,7 @@ public class Game extends ApplicationAdapter {
 		camera.update();
 		//playerSprite.setPosition(player.getPosition().x, player.getPosition().y);
 		batch.begin();
+		batch.draw(new Sprite(new Texture("Images/Sky.png")),0f,0f,Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
 		// renders blocks
 		float xScale = (float)(BLOCKS_HORIZONTAL_AXIS/(Gdx.graphics.getWidth()/PPM));
 		float yScale = (float)(BLOCKS_VERTICAL_AXIS/(Gdx.graphics.getHeight()/PPM));
@@ -115,6 +116,7 @@ public class Game extends ApplicationAdapter {
 			Entity e2 = Entity.getInstance(contact.getFixtureB().getBody());
 			if (e1 != null && e2 != null) {
 				e1.collision(e2);
+				e2.collision(e1);
 			}
 		}
 		batch.end();

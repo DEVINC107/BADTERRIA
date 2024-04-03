@@ -1,6 +1,7 @@
 package com.mygdx.game.Entity;
 
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector3;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.mygdx.game.Game;
 import com.mygdx.game.Item.Pickaxe;
+import com.mygdx.game.Item.Sword;
 import com.mygdx.game.TUtility;
 
 import java.io.IOError;
@@ -24,10 +26,9 @@ public class Player extends Entity {
     boolean reachedMaxJumpVel = false;
     double highestJumpVel = 0;
     Item[] inventory = new Item[numSlots];
-    float lastSmartCursorX;
-    float lastSmartCursorY;
     int equipped = 0;
     int health = 100;
+    int maxHealth = 100;
     private int dir = 0; // 0 = left, 1 = right
     public int getDir() {
         return dir;
@@ -54,73 +55,18 @@ public class Player extends Entity {
         circle.friction = 0f;
         setBody(body);
         inventory[0] = new Pickaxe("WoodPickaxe");
-
+        inventory[1] = new Sword("WoodSword");
         body.createFixture(circle);
         body.createFixture(fixtureDef);
     }
-    double precision = 1;
-    double angle = 45;
-    int maxRange = 5;
-    long lastTick = 0;
-    Vector2 blockPos;
-    public void smartCursor() {
-        if (blockPos != null) {
-            TUtility.drawSprite(new Sprite(new Texture("Images/SmartCursorSelect.png")), blockPos.x, blockPos.y);
+    public void setHealth(int newHealth) {
+        this.health = newHealth;
+        if (health <= 0) {
+            health = 100;
+            this.body.setTransform(new Vector2(0,50), 0);
         }
-        if (System.currentTimeMillis() - lastTick < 200) {
-            return;
-        }
-        lastTick = System.currentTimeMillis();
-        Vector2 cursor = TUtility.getCursor();
-        Vector2 pos = body.getPosition();
-        float xDiff = cursor.x - pos.x;
-        float yDiff = cursor.y - pos.y;
-        float radius = (float) Math.sqrt(Math.pow(cursor.x-pos.x,2) + Math.pow(cursor.y-pos.y,2));
-
-        if (radius > maxRange) {
-            float cSquared = (float) Math.pow(radius,2);
-            float xSign = Math.signum(xDiff);
-            float ySign = Math.signum(yDiff);
-            xDiff = xSign * (float) (Math.pow(xDiff,2)/cSquared)*maxRange;
-            yDiff = ySign * (float) (Math.pow(yDiff,2)/cSquared)*maxRange;
-            radius = maxRange;
-        }
-
-        float closestDistance = Integer.MAX_VALUE;
-        Block closestBlock = null;
-        float degOffset = (float) Math.toDegrees(Math.acos(Math.abs(xDiff)/radius));
-        if (xDiff < 0 && yDiff > 0) {
-            degOffset = 180 - degOffset;
-        } else if (xDiff <= 0 && yDiff <= 0) {
-            degOffset = 180 + degOffset;
-        } else if (xDiff >= 0 && yDiff <= 0) {
-            degOffset = -degOffset;
-        }
-        for (float deg = (float) -angle/2; deg <= angle/2; deg += angle/precision) {
-            float rad = (float) Math.toRadians(deg + degOffset);
-            float x = pos.x + (float) Math.cos(rad) * radius;
-            float y = pos.y + (float) Math.sin(rad) * radius;
-            Block result = BlockTracker.raycast(pos,new Vector2(x, y));
-            if (result == null) {
-                continue;
-            }
-            Vector2 blockPos = BlockTracker.getBlockPosition(result);
-            float distance = (float) Math.sqrt(Math.pow(pos.x-blockPos.x,2) + Math.pow(pos.y-blockPos.y,2));
-            if (distance < closestDistance) {
-                closestDistance = distance;
-                closestBlock = result;
-            }
-        }
-        if (closestBlock == null) {
-            return;
-        }
-        lastSmartCursorX = cursor.x;
-        lastSmartCursorY = cursor.y;
-        blockPos = BlockTracker.getBlockPosition(closestBlock);
-        //TUtility.drawSprite(new Sprite(new Texture("Images/SmartCursorSelect.png")),blockPos.x,blockPos.y);
-        //System.out.println(BlockTracker.getBlockPosition(closestBlock));
-        //block breaking
     }
+
     public void renderSlots() {
         float pps = (float) (Gdx.graphics.getWidth()/2)/numSlots;
         for (int i = 0; i < 9; i ++) {
@@ -160,13 +106,9 @@ public class Player extends Entity {
     public void update() {
         super.update();
         //Game.batch.begin();
+        inventory[equipped].heldUpdate();
         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-            if (blockPos != null) {
-                ArrayList<Block> blocksAtPos = BlockTracker.getBlocksAtPosition(blockPos);
-                if (blocksAtPos.size() > 0) {
-                    blocksAtPos.get(0).takeDamage(10);
-                }
-            }
+            inventory[equipped].mouseDown();
         }
         Vector2 vel = body.getLinearVelocity();
         Vector2 pos = body.getPosition();
@@ -213,11 +155,14 @@ public class Player extends Entity {
         } else {
             TUtility.drawSprite(new Sprite(new Texture("Images/Player/player_right.png")),pos.x,pos.y);
         }
-        smartCursor();
         renderSlots();
         renderEquipped();
-        for (int i = 0; i < health/10; i ++) {
-            Game.batch.draw(new Texture("Images/Heart.png"),Gdx.graphics.getWidth()-(25*i),Gdx.graphics.getHeight()-25,25,25);
+        for (int i = 0; i < maxHealth/10; i ++) {
+            if (health < i*10) {
+                Game.batch.draw(new Sprite(new Texture("Images/MissingHeart.png")),Gdx.graphics.getWidth()-(25*i),Gdx.graphics.getHeight()-25,25,25);
+            } else {
+                Game.batch.draw(new Sprite(new Texture("Images/Heart.png")),Gdx.graphics.getWidth()-(25*i),Gdx.graphics.getHeight()-25,25,25);
+            }
         }
         //Game.batch.end();
     }

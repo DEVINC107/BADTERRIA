@@ -44,6 +44,14 @@ public class Item {
 
     }
 
+    public void mouseDown() {
+
+    }
+
+    public void heldUpdate() {
+
+    }
+
     public String getItemId() {
         return itemId;
     }

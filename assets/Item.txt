@@ -1,1 +1,2 @@
 WoodPickaxe 1
+WoodSword 20

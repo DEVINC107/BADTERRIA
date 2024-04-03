@@ -1,6 +1,8 @@
 package com.mygdx.game.Entity;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.mygdx.game.Game;
 import com.mygdx.game.TUtility;
 
 import java.io.File;
@@ -9,9 +11,9 @@ import java.util.ArrayList;
 
 public class Entity {
     public String entityId;
-    private int health = 0;
+    public int health = 100;
     public Body body;
-    private static ArrayList<Entity> entities = new ArrayList<>();
+    public static ArrayList<Entity> entities = new ArrayList<>();
 
     public Entity(String entityId) {
         String[] data = TUtility.getData("Entity.txt",entityId);
@@ -27,7 +29,20 @@ public class Entity {
     public void setBody(Body body) {
         this.body = body;
     }
+    public void setHealth(int newHealth) {
+        this.health = newHealth;
+        if (this.health <= 0) {
+            this.die();
+        }
+    }
+    public void die() {
 
+    }
+    public void applyKnockback(Entity other, float strength) {
+        Vector2 knockback = this.body.getPosition().sub(other.body.getPosition()).nor();
+        Vector2 playerPos = this.body.getPosition();
+        Game.player.body.applyLinearImpulse(-knockback.x * 7.5f, -knockback.y * 7.5f, playerPos.x, playerPos.y, true);
+    }
     public static void updateEntities() {
         for (Entity entity : entities) {
             entity.update();
