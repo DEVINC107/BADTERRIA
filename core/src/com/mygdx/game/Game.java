@@ -160,7 +160,7 @@ public class Game extends ApplicationAdapter {
 				for (int i = 0; i < blocksToRemove.size(); i++) {
 					blocksToRemove.get(i).destroyBlock(false);
 				}
-				new CreateBlock("Dirt", TUtility.getRoundedVector2(mousePos));
+				new CreateBlock("TNT", TUtility.getRoundedVector2(mousePos));
 			}
 		}
 
@@ -193,7 +193,9 @@ public class Game extends ApplicationAdapter {
 	}
 
 	public static void addToBlockUpdates(Block block, double timeBeforeUpdate) {
-		blockUpdateTimes.put(block, Math.round(System.currentTimeMillis() + timeBeforeUpdate * 1000));
+		if (!blockUpdateTimes.containsKey(block)) {
+			blockUpdateTimes.put(block, Math.round(System.currentTimeMillis() + timeBeforeUpdate * 1000));
+		}
 	}
 
 	public static Texture getBlockTexture(String name) {

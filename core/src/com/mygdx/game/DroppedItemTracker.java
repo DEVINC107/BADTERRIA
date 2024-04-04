@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DroppedItemTracker {
+    private static final double RENDER_SCALE = 0.4;
     private static ArrayList<DroppedItem> droppedItems = new ArrayList<>();
 
     public DroppedItemTracker() {
@@ -38,10 +39,12 @@ public class DroppedItemTracker {
             Texture currentTexture = Game.getBlockTexture(item.getName());
             double xSize = currentTexture.getWidth()/xScale;
             double ySize = currentTexture.getHeight()/yScale;
+            xSize *= RENDER_SCALE;
+            ySize *= RENDER_SCALE;
             double xPos = (item.getPos().x - Game.player.body.getPosition().x) * (PPM/xScale) + Gdx.graphics.getWidth() / 2 - xSize / 2;
             double yPos = (item.getPos().y - Game.player.body.getPosition().y) * (PPM/yScale) + Gdx.graphics.getHeight() / 2 - ySize / 2;
             if (yPos > -100 && yPos < Gdx.graphics.getHeight() + 100 && xPos > -100 && xPos < Gdx.graphics.getWidth() + 100) {
-                TUtility.drawSprite(new Sprite(currentTexture), (float) xPos, (float) yPos);
+                Game.batch.draw(currentTexture, (float) xPos, (float) yPos, (float) xSize, (float) ySize);
             }
         }
     }
