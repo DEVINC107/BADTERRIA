@@ -13,8 +13,8 @@ public class DroppedItem {
 
         World world = Game.getWorld();
         BodyDef groundBodyDef = new BodyDef();
-        groundBodyDef.type = BodyDef.BodyType.StaticBody;
-        groundBodyDef.position.set(position);
+        groundBodyDef.type = BodyDef.BodyType.DynamicBody;
+        groundBodyDef.position.set(new Vector2(position.x + (float) TUtility.getRandomDouble(-0.2, 0.2), position.y));
         groundBody = world.createBody(groundBodyDef);
         PolygonShape groundBox = new PolygonShape();
         groundBox.setAsBox((float) 0.1, (float) 0.1);

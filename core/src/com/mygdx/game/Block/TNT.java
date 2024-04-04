@@ -21,10 +21,12 @@ public class TNT extends Block {
     }
 
     public void updateBlock() {
-        HashMap<Block, Vector2> blocks = BlockTracker.getAllBlockPositions();
         Vector2 pos = BlockTracker.getBlockPosition(this);
+
+        this.destroyBlock(false);
+
+        HashMap<Block, Vector2> blocks = BlockTracker.getAllBlockPositions();
         ArrayList<Block> toDestroy = new ArrayList<>();
-        ArrayList<Vector2> positionsToUpdate = new ArrayList<>();
         for (HashMap.Entry<Block, Vector2> entry : blocks.entrySet()) {
             Block currentBlock = entry.getKey();
             Vector2 currentPos = entry.getValue();
@@ -33,7 +35,7 @@ public class TNT extends Block {
             }
         }
         for (int i = 0; i < toDestroy.size(); i++) {
-            toDestroy.get(i).destroyBlock(true);
+            toDestroy.get(i).takeDamage(999);
         }
     }
 
