@@ -50,6 +50,7 @@ public class Slime extends RenewableMob {
     }
 
     public void die() {
-        System.out.println("PIG DEAD");
+        System.out.println("DEAD");
+        super.die();
     }
 }

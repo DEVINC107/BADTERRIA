@@ -38,4 +38,8 @@ public class RenewableMob extends Entity{
             return;
         }
     }
+
+    public void die() {
+        super.die();
+    }
 }
