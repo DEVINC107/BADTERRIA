@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.mygdx.game.Game;
 import com.mygdx.game.TUtility;
+import jdk.internal.foreign.ArenaAllocator;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -17,8 +18,11 @@ public class Entity {
     public int health = 100;
     public Body body;
     public Sprite sprite;
+    public boolean dead;
     public long startedTakingDamage = 0;
     public static ArrayList<Entity> entities = new ArrayList<>();
+    public static boolean updating = false;
+    public static ArrayList<Entity> toRemove = new ArrayList<>();
 
     public Entity(String entityId) {
         String[] data = TUtility.getData("Entity.txt",entityId);
@@ -44,22 +48,43 @@ public class Entity {
 
         this.health = newHealth;
         this.startedTakingDamage = System.currentTimeMillis();
+        System.out.println("TOOK DAMAGE");
         if (this.health <= 0) {
+            System.out.println("DYING");
             this.die();
         }
     }
     public void die() {
-
+        dead = true;
+        if (updating) {
+            toRemove.add(this);
+            System.out.println("REMOVED");
+        } else {
+            entities.remove(this);
+        }
+        System.out.println("DEAD");
     }
     public void applyKnockback(Entity other, float strength) {
         Vector2 knockback = other.body.getPosition().sub(this.body.getPosition()).nor();
         Vector2 playerPos = this.body.getPosition();
         other.body.applyLinearImpulse(knockback.x * 7.5f, knockback.y * 7.5f, playerPos.x, playerPos.y, true);
     }
+    public void destroy() {
+        Game.world.destroyBody(body);
+    }
+
     public static void updateEntities() {
+        updating = true;
+        toRemove = new ArrayList<>();
         for (Entity entity : entities) {
             entity.update();
+            entity.destroy();
         }
+        for (Entity entity : toRemove) {
+            entities.remove(entity);
+            entity.destroy();
+        }
+        updating = false;
     }
 
     public int getHealth() {
@@ -88,4 +113,5 @@ public class Entity {
     public void collision(Entity other) {
 
     }
+
 }
