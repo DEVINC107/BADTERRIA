@@ -21,9 +21,9 @@ public class Sword extends Item {
                 continue;
             }
             System.out.println(e.entityId);
-            if (e.body.getPosition().sub(Game.player.body.getPosition()).len() < 2) {
+            if (e.body.getPosition().sub(Game.player.body.getPosition()).len() < 5) {
                 e.setHealth(e.health - 10);
-                e.applyKnockback(e, 5);
+                Game.player.applyKnockback(e, 5);
             }
         }
         lastTickUpdate = System.currentTimeMillis();

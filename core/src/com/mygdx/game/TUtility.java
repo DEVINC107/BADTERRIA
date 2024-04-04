@@ -117,7 +117,6 @@ public class TUtility {
     }
 
     public static File getFile(String imageId, File root) {
-        System.out.println(root.getPath().replace("\\","/")+"/"+imageId+".png");
         File f = new File(root.getPath().replace("\\","/")+"/"+imageId+".png");
         if (f.exists()) {
             return f;
