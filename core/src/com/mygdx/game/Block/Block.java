@@ -45,13 +45,15 @@ public class Block {
         }
     }
 
-    public void destroyBlock() {
+    public void destroyBlock(boolean shouldDropItem) {
         isDestroyed = true;
         removeCollision();
         Vector2 blockPos = BlockTracker.getBlockPosition(this);
         BlockTracker.removeBlock(this);
         BlockTracker.updateSurroundingBlocks(blockPos);
-        new DroppedItem(name, blockPos);
+        if (shouldDropItem) {
+            new DroppedItem(name, blockPos);
+        }
     }
 
     //returns true if damage is successfully dealt
@@ -59,7 +61,7 @@ public class Block {
         if (destroyable) {
             health -= damage;
             if (health <= 0) {
-                destroyBlock();
+                destroyBlock(true);
             }
             return true;
         }

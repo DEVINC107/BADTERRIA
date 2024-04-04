@@ -31,7 +31,7 @@ public class GravityBlock extends Block {
         }
         if (canFall) {
             for (int i = 0; i < blocksToRemove.size(); i++) {
-                blocksToRemove.get(i).destroyBlock();
+                blocksToRemove.get(i).destroyBlock(false);
             }
             BlockTracker.setPosition(this, new Vector2(currentPos.x, (float) Math.round((currentPos.y - 0.1) * 10) / 10));
             beginUpdating();

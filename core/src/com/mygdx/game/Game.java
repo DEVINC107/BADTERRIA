@@ -158,7 +158,7 @@ public class Game extends ApplicationAdapter {
 			}
 			if (canPlace && hasSurroundingBlock) {
 				for (int i = 0; i < blocksToRemove.size(); i++) {
-					blocksToRemove.get(i).destroyBlock();
+					blocksToRemove.get(i).destroyBlock(false);
 				}
 				new CreateBlock("Dirt", TUtility.getRoundedVector2(mousePos));
 			}
@@ -182,6 +182,10 @@ public class Game extends ApplicationAdapter {
 				currentBlock.updateBlock();
 			}
 		}
+
+		batch.begin();
+		DroppedItemTracker.renderDroppedItems();
+		batch.end();
 
 		counter.stop();
 		//System.out.println(counter.time);

@@ -8,6 +8,9 @@ public class DroppedItem {
     private Fixture fixture;
     private String name;
     public DroppedItem(String item, Vector2 position) {
+        name = item;
+        DroppedItemTracker.addToDroppedItems(this);
+
         World world = Game.getWorld();
         BodyDef groundBodyDef = new BodyDef();
         groundBodyDef.type = BodyDef.BodyType.StaticBody;
@@ -25,6 +28,8 @@ public class DroppedItem {
             groundBody = null;
             fixture = null;
         }
+
+        DroppedItemTracker.removeFromDroppedItems(this);
     }
 
     public String getName() {

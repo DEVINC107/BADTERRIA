@@ -33,7 +33,7 @@ public class TNT extends Block {
             }
         }
         for (int i = 0; i < toDestroy.size(); i++) {
-            toDestroy.get(i).destroyBlock();
+            toDestroy.get(i).destroyBlock(true);
         }
     }
 

@@ -25,7 +25,7 @@ public class LiquidBlock extends Block {
             for (int i = 0; i < blocksAtPos.size(); i++) {
                 Block currentBlock = blocksAtPos.get(i);
                 if (currentBlock.getBlockType().equals("Liquid") && currentBlock.getName().substring(0, sourceBlockName.length()).equals(sourceBlockName) && Integer.parseInt(currentBlock.getName().substring(sourceBlockName.length())) < level) {
-                    currentBlock.destroyBlock();
+                    currentBlock.destroyBlock(false);
                     new CreateBlock(sourceBlockName + level, pos);
                     BlockTracker.updateSurroundingBlocks(pos);
                 }
