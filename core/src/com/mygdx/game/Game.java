@@ -160,7 +160,7 @@ public class Game extends ApplicationAdapter {
 				for (int i = 0; i < blocksToRemove.size(); i++) {
 					blocksToRemove.get(i).destroyBlock(false);
 				}
-				new CreateBlock("TNT", TUtility.getRoundedVector2(mousePos));
+				new CreateBlock("Sand", TUtility.getRoundedVector2(mousePos));
 			}
 		}
 
