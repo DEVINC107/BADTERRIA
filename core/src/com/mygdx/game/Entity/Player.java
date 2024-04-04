@@ -67,6 +67,14 @@ public class Player extends Entity {
         }
     }
 
+    public String getSpriteId() {
+        if (dir == 0) {
+            return "player_left";
+        } else {
+            return "player_right";
+        }
+    }
+
     public void renderSlots() {
         float pps = (float) (Gdx.graphics.getWidth()/2)/numSlots;
         for (int i = 0; i < 9; i ++) {

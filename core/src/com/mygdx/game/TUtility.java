@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -104,19 +105,40 @@ public class TUtility {
     }
 
     public static void drawSprite(String spriteId, double x, double y) {
-        File file = new File("Images");
-        String[] directories = file.list(new FilenameFilter() {
-            @Override
-            public boolean accept(File current, String name) {
-                return new File(current, name).isDirectory();
-            }
-        });
-        for (String directory : directories) {
-            File f = new File("Images/" + directory + "/" + spriteId + ".png");
+        drawSprite(new Sprite(new Texture(getImage(spriteId).getPath())),x,y);
+    }
+
+    public static void drawSprite(String spriteId, double x, double y, double xSize, double ySize) {
+        drawSprite(new Sprite(new Texture(getImage(spriteId).getPath())),x,y);
+    }
+
+    public static void drawSprite(Texture texture, double xSize, double ySize) {
+        drawSprite(new Sprite(texture),xSize,ySize);
+    }
+
+    public static File getFile(String imageId, File root) {
+        System.out.println(root.getPath().replace("\\","/")+"/"+imageId+".png");
+        File f = new File(root.getPath().replace("\\","/")+"/"+imageId+".png");
+        if (f.exists()) {
+            return f;
+        }
+        for (File file : root.listFiles()) {;
+            f = new File(file.getPath().replace("\\","/")+"/"+imageId+".png");
             if (f.exists()) {
-                drawSprite(new Sprite(new Texture(f.getPath())),x,y);
+                return f;
+            }
+            if (file.isDirectory()) {
+                f = getFile(imageId, file);
+                if (f!=null) {
+                    return f;
+                }
             }
         }
+        return null;
+    }
+
+    public static File getImage(String imageId) {
+        return getFile(imageId, new File("Images"));
     }
 
     public static Vector2 meterToPixel(Vector2 meters) {
