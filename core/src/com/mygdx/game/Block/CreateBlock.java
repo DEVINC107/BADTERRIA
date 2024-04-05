@@ -16,6 +16,8 @@ public class CreateBlock {
             new TNT(blockName, position);
         } else if (blockType.equals("Gravity")) {
             new GravityBlock(blockName, position);
+        } else if (blockType.equals("Chest")) {
+            new Chest(blockName, position);
         }
     }
 }

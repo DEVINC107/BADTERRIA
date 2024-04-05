@@ -4,14 +4,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.Game;
 import com.mygdx.game.Item.Item;
 import com.mygdx.game.TUtility;
 
-public class Chest extends NoncollidableBlock {
+public class Chest extends Block {
     public Item[][] items = new Item[5][5];
-    public Chest(Vector2 pos) {
-        super("Chest", pos);
+    public Chest(String blockName, Vector2 pos) {
+        super(blockName, pos, "Chest");
     }
     public static float chestSlotPixels = 20;
     float padding = 5;
@@ -38,5 +39,9 @@ public class Chest extends NoncollidableBlock {
     public void onClicked() {
         System.out.println("CLICKED");
         Game.player.openChest = this;
+    }
+
+    public void setCollision(Vector2 position, World world) {
+        //empty so no collisions :)
     }
 }

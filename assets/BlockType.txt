@@ -13,3 +13,4 @@ Flower,Noncollidable
 TNT,TNT
 Sand,Gravity
 Iron,Default
+Chest,Chest

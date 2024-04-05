@@ -77,6 +77,7 @@ public class Game extends ApplicationAdapter {
 		blockTextures.put("TNT", new Texture("Images/Blocks/tnt.png"));
 		blockTextures.put("Sand", new Texture("Images/Blocks/sand.png"));
 		blockTextures.put("Chest", new Texture("Images/Blocks/chest.png"));
+		blockTextures.put("Iron", new Texture("Images/Blocks/iron.png"));
 
 		//starts some stuff
 		TerrainGenerator.setTreeData();
@@ -85,8 +86,9 @@ public class Game extends ApplicationAdapter {
 		TerrainGenerator.generateTerrain();
 
 		Block b = BlockTracker.raycast(new Vector2(0, 50), new Vector2(0, -100));
-		Vector2 chestPos = BlockTracker.getBlockPosition(b).add(new Vector2(0, 2));
-		chest = new Chest(chestPos);
+		Vector2 pos = BlockTracker.getBlockPosition(b);
+		Vector2 chestPos = new Vector2(pos.x, pos.y + 3);
+		new CreateBlock("Chest", chestPos);
 		System.out.println(BlockTracker.getBlockPosition(chest));
 	}
 
