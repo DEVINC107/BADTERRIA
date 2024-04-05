@@ -75,6 +75,7 @@ public class TerrainGenerator {
     private static final int MAP_LENGTH = 200;
     private static final int MAP_HEIGHT = 20;
     private static final int DIRT_LENGTH = 3;
+    private static final int IRON_GENERATE_CHANCE = 5; // 0 to 100
 
     public static double currentElevation = 0;
 
@@ -105,7 +106,12 @@ public class TerrainGenerator {
             }
             currentHeight -= DIRT_LENGTH;
             for (int y = currentHeight; y > -MAP_HEIGHT; y--) {
-                new CreateBlock("Stone", new Vector2(x, y));
+                int random = TUtility.getRandomInt(1, 100);
+                if (random <= IRON_GENERATE_CHANCE) {
+                    new CreateBlock("Iron", new Vector2(x, y));
+                } else {
+                    new CreateBlock("Stone", new Vector2(x, y));
+                }
             }
         }
     }
@@ -134,7 +140,12 @@ public class TerrainGenerator {
             }
             currentHeight -= DIRT_LENGTH;
             for (int y = currentHeight; y > -MAP_HEIGHT; y--) {
-                new CreateBlock("Stone", new Vector2(x, y));
+                int random = TUtility.getRandomInt(1, 100);
+                if (random <= IRON_GENERATE_CHANCE) {
+                    new CreateBlock("Iron", new Vector2(x, y));
+                } else {
+                    new CreateBlock("Stone", new Vector2(x, y));
+                }
             }
         }
     }
@@ -161,7 +172,12 @@ public class TerrainGenerator {
         for (int x = startX; x <= endX; x++) {
             int currentHeight = Math.round((float) currentElevation);
             for (int y = currentHeight; y > -MAP_HEIGHT; y--) {
-                new CreateBlock("Stone", new Vector2(x, y));
+                int random = TUtility.getRandomInt(1, 100);
+                if (random <= IRON_GENERATE_CHANCE) {
+                    new CreateBlock("Iron", new Vector2(x, y));
+                } else {
+                    new CreateBlock("Stone", new Vector2(x, y));
+                }
             }
 
             // changes current Hill Height
@@ -230,7 +246,12 @@ public class TerrainGenerator {
             }
             currentHeight -= DIRT_LENGTH;
             for (int y = currentHeight; y > -MAP_HEIGHT; y--) {
-                new CreateBlock("Stone", new Vector2(x, y));
+                int random = TUtility.getRandomInt(1, 100);
+                if (random <= IRON_GENERATE_CHANCE) {
+                    new CreateBlock("Iron", new Vector2(x, y));
+                } else {
+                    new CreateBlock("Stone", new Vector2(x, y));
+                }
             }
 
             // changes current Hill Height

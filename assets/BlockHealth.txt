@@ -5,3 +5,4 @@ Stone,300
 Flower,10
 Leaves,30
 Sand,40
+Iron,500
