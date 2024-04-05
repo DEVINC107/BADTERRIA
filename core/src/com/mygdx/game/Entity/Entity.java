@@ -7,7 +7,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.mygdx.game.Game;
 import com.mygdx.game.TUtility;
-import jdk.internal.foreign.ArenaAllocator;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -61,6 +60,7 @@ public class Entity {
             System.out.println("REMOVED");
         } else {
             entities.remove(this);
+            System.out.println("REMOVED");
         }
         System.out.println("DEAD");
     }
@@ -78,7 +78,6 @@ public class Entity {
         toRemove = new ArrayList<>();
         for (Entity entity : entities) {
             entity.update();
-            entity.destroy();
         }
         for (Entity entity : toRemove) {
             entities.remove(entity);
