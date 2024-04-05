@@ -22,6 +22,9 @@ public class Chest extends Block {
         for (int x = 0; x < items.length; x ++) {
             for (int y = 0; y < items.length; y ++) {
                 Game.batch.draw(new Sprite(new Texture("Images/HotbarSlot.png")),centerX + x * chestSlotPixels,centerY + y * chestSlotPixels,20,20);
+                if (items[x][y] != null) {
+                    Game.batch.draw(new Sprite(new Texture("Images/Items/"+items[x][y].getItemId()+".png")),centerX + x * chestSlotPixels,centerY + y * chestSlotPixels,20,20);
+                }
             }
         }
     }
@@ -32,8 +35,15 @@ public class Chest extends Block {
         return i;
     }
 
-    public void addItem(int x, int y, Item i) {
-        items[x][y] = i;
+    public void addItem(Item i) {
+        for (int x = 0; x < items.length; x ++) {
+            for (int y = 0; y < items.length; y ++) {
+                if (items[x][y]==null) {
+                    items[x][y] = i;
+                    return;
+                }
+            }
+        }
     }
 
     public void onClicked() {

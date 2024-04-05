@@ -61,6 +61,7 @@ public class Player extends Entity {
         body.createFixture(circle);
         body.createFixture(fixtureDef);
     }
+    @Override
     public void setHealth(int newHealth) {
         this.health = newHealth;
         if (health <= 0) {
@@ -76,9 +77,11 @@ public class Player extends Entity {
             return "player_right";
         }
     }
+    boolean addedItem = false;
 
     public void renderSlots() {
         float pps = (float) (Gdx.graphics.getWidth()/2)/numSlots;
+        float offset = (float) (pps*0.2)/2;
         for (int i = 0; i < 9; i ++) {
             if (!Gdx.input.isKeyPressed(hotkeys[i])) {
                 continue;
@@ -91,8 +94,21 @@ public class Player extends Entity {
         for (int i = 0; i < numSlots; i ++) {
             Game.batch.draw(new Texture((i != equipped) ? "Images/HotbarSlot.png" : "Images/HotbarSlotEquipped.png"),i*(pps+1),Gdx.graphics.getHeight()-pps,pps,pps);
             if (inventory[i] != null) {
-                float offset = (float) (pps*0.2)/2;
                 Game.batch.draw(new Texture("Images/Items/"+inventory[i].getItemId()+".png"),i*(pps+1) + offset,Gdx.graphics.getHeight()-pps + offset,pps*0.8f,pps*0.8f);
+            }
+        }
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+            System.out.println(pps-offset+"--------------");
+            int i = (int) ((Gdx.input.getX() - offset)/(pps+1));
+            if (Gdx.input.getY() <= pps-offset) {
+                Item item = inventory[i];
+                System.out.println(item);
+                if (item != null && openChest != null && equipped != i) {
+                    System.out.println("ADDING ITEM");
+                    openChest.addItem(item);
+                    inventory[i] = null;
+                    addedItem = true;
+                }
             }
         }
     }
@@ -113,35 +129,56 @@ public class Player extends Entity {
         }
     }
 
+    long lastOpenedChest = 0;
+
     public void update() {
         super.update();
         //Game.batch.begin();
-        inventory[equipped].heldUpdate();
+        if (inventory[equipped] != null) {
+            inventory[equipped].heldUpdate();
+        }
         if (openChest != null) {
             openChest.show();
         }
-        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-            inventory[equipped].mouseDown();
-            if (openChest != null) {
-                int x = (Gdx.input.getX()-Gdx.graphics.getWidth())/(int) Chest.chestSlotPixels;
-                int y = (Gdx.input.getY()-Gdx.graphics.getHeight())/(int) Chest.chestSlotPixels;
-                if (x <= 4 && x >= 0 && y >= 0 && y <= 4) {
-                    Item i = openChest.takeItem(x, y);
-                    if (i != null) {
-                        System.out.println("TAKEN");
+        renderSlots();
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && addedItem == false) {
+            if (inventory[equipped] != null) {
+                inventory[equipped].mouseDown();
+            }
+            if (System.currentTimeMillis() - lastOpenedChest > 100) {
+                if (openChest != null) {
+                    int x = (Gdx.input.getX()-Gdx.graphics.getWidth()/2)/(int) Chest.chestSlotPixels;
+                    int y = (Gdx.input.getY()-Gdx.graphics.getHeight()/2)/(int) Chest.chestSlotPixels;
+                    if (x <= 4 && x >= 0 && y >= 0 && y <= 4) {
+                        Item i = openChest.takeItem(x, y);
+                        if (i != null) {
+                            for (int a = 0; a < inventory.length; a ++) {
+                                if (inventory[a] == null) {
+                                    inventory[a] = i;
+                                    break;
+                                }
+                            }
+                            System.out.println("TAKEN");
+                        }
+                    } else {
+                        openChest = null;
                     }
                 } else {
-                    openChest = null;
+                    ArrayList<Block> blocks = BlockTracker.getBlocksAtPosition(TUtility.getCursor());
+                    if (blocks.size() > 0) {
+                        System.out.println(blocks.get(0).getClass());
+                        blocks.get(0).onClicked();
+                    }
                 }
-            } else {
-                ArrayList<Block> blocks = BlockTracker.getBlocksAtPosition(TUtility.getCursor());
-                if (blocks.size() > 0) {
-                    System.out.println(blocks.get(0).getClass());
-                    blocks.get(0).onClicked();
-                }
+                lastOpenedChest = System.currentTimeMillis();
             }
 
         }
+        if (addedItem == true) {
+            addedItem = false;
+            lastOpenedChest = System.currentTimeMillis();
+        }
+
         Vector2 vel = body.getLinearVelocity();
         Vector2 pos = body.getPosition();
         float MAX_VELOCITY = 3.5f;
@@ -187,7 +224,6 @@ public class Player extends Entity {
         } else {
             TUtility.drawSprite(new Sprite(new Texture("Images/Player/player_right.png")),pos.x,pos.y);
         }
-        renderSlots();
         renderEquipped();
         for (int i = 0; i < maxHealth/10; i ++) {
             if (health < i*10) {
