@@ -289,11 +289,11 @@ public class TerrainGenerator {
         currentX = -MAP_LENGTH/2;
         while (currentX < MAP_LENGTH/2) {
             int random = TUtility.getRandomInt(1, 2000);
-            if (random < 300) {
+            if (random < 800) {
                 generateHillsTerrain();
-            } else if (random < 600) {
+            } else if (random < 1300) {
                 generatePlainsTerrain();
-            } else if (random <= 800) {
+            } else if (random <= 1600) {
                 generateMountainsTerrain();
             } else if (random <= 2000) {
                 generateLakeTerrain();
