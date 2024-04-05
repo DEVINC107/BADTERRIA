@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.Block.Block;
+import com.mygdx.game.Block.Chest;
 import com.mygdx.game.BlockTracker;
 import com.mygdx.game.Item.Item;
 import com.badlogic.gdx.Gdx;
@@ -28,6 +29,7 @@ public class Player extends Entity {
     Item[] inventory = new Item[numSlots];
     int equipped = 0;
     int health = 100;
+    public Chest openChest;
     int maxHealth = 100;
     private int dir = 0; // 0 = left, 1 = right
     public int getDir() {
@@ -115,8 +117,30 @@ public class Player extends Entity {
         super.update();
         //Game.batch.begin();
         inventory[equipped].heldUpdate();
+        if (openChest != null) {
+            openChest.show();
+        }
         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
             inventory[equipped].mouseDown();
+            if (openChest != null) {
+                int x = (Gdx.input.getX()-Gdx.graphics.getWidth())/(int) Chest.chestSlotPixels;
+                int y = (Gdx.input.getY()-Gdx.graphics.getHeight())/(int) Chest.chestSlotPixels;
+                if (x <= 4 && x >= 0 && y >= 0 && y <= 4) {
+                    Item i = openChest.takeItem(x, y);
+                    if (i != null) {
+                        System.out.println("TAKEN");
+                    }
+                } else {
+                    openChest = null;
+                }
+            } else {
+                ArrayList<Block> blocks = BlockTracker.getBlocksAtPosition(TUtility.getCursor());
+                if (blocks.size() > 0) {
+                    System.out.println(blocks.get(0).getClass());
+                    blocks.get(0).onClicked();
+                }
+            }
+
         }
         Vector2 vel = body.getLinearVelocity();
         Vector2 pos = body.getPosition();

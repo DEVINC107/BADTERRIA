@@ -20,7 +20,6 @@ public class Sword extends Item {
             if (e == Game.player) {
                 continue;
             }
-            System.out.println(e.entityId);
             if (e.body.getPosition().sub(Game.player.body.getPosition()).len() < 5) {
                 e.setHealth(e.health - 10);
                 Game.player.applyKnockback(e, 5);

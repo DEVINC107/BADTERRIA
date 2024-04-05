@@ -37,6 +37,10 @@ public class Block {
         isDestroyed = false;
         BlockTracker.setPosition(this, position);
     }
+
+    public void onClicked() {
+
+    }
     public void removeCollision() {
         if (groundBody != null && fixture != null) {
             groundBody.destroyFixture(fixture);

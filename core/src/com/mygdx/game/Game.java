@@ -16,6 +16,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.mygdx.game.Block.Chest;
 import com.mygdx.game.Block.CreateBlock;
 import com.mygdx.game.Block.DefaultBlock;
 import com.mygdx.game.Entity.Entity;
@@ -43,6 +44,8 @@ public class Game extends ApplicationAdapter {
 	public static PerformanceCounter counter;
 
 	public static FPSLogger logger = new FPSLogger();
+
+	public static Chest chest;
 
 	@Override
 	public void create () {
@@ -73,12 +76,18 @@ public class Game extends ApplicationAdapter {
 		blockTextures.put("Water6", new Texture("Images/Blocks/water6.png"));
 		blockTextures.put("TNT", new Texture("Images/Blocks/tnt.png"));
 		blockTextures.put("Sand", new Texture("Images/Blocks/sand.png"));
+		blockTextures.put("Chest", new Texture("Images/Blocks/chest.png"));
 
 		//starts some stuff
 		TerrainGenerator.setTreeData();
 
 		// creates blocks
 		TerrainGenerator.generateTerrain();
+
+		Block b = BlockTracker.raycast(new Vector2(0, 50), new Vector2(0, -100));
+		Vector2 chestPos = BlockTracker.getBlockPosition(b).add(new Vector2(0, 2));
+		chest = new Chest(chestPos);
+		System.out.println(BlockTracker.getBlockPosition(chest));
 	}
 
 	@Override
@@ -121,6 +130,7 @@ public class Game extends ApplicationAdapter {
 				e2.collision(e1);
 			}
 		}
+		//chest.show();
 		batch.end();
 
 		debugRenderer.render(world, camera.combined);
@@ -163,6 +173,8 @@ public class Game extends ApplicationAdapter {
 				new CreateBlock("Sand", TUtility.getRoundedVector2(mousePos));
 			}
 		}
+
+
 
 		long currentTimeMillis = System.currentTimeMillis();
 		ArrayList<Block> readyToUpdate = new ArrayList<>();

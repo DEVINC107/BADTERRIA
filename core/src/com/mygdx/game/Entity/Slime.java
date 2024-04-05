@@ -44,7 +44,6 @@ public class Slime extends RenewableMob {
             Vector2 knockback = Game.player.body.getPosition().sub(body.getPosition()).nor();
             Vector2 playerPos = Game.player.body.getPosition();
             Game.player.body.applyLinearImpulse(-knockback.x * 7.5f, -knockback.y * 7.5f, playerPos.x, playerPos.y, true);
-            System.out.println("FORCED APPLIED");
             lastHitTick = System.currentTimeMillis();
         }
     }
