@@ -73,6 +73,7 @@ public class Game extends ApplicationAdapter {
 		blockTextures.put("Water6", new Texture("Images/Blocks/water6.png"));
 		blockTextures.put("TNT", new Texture("Images/Blocks/tnt.png"));
 		blockTextures.put("Sand", new Texture("Images/Blocks/sand.png"));
+		blockTextures.put("Iron", new Texture("Images/Blocks/iron.png"));
 
 		//starts some stuff
 		TerrainGenerator.setTreeData();

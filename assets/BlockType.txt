@@ -12,3 +12,4 @@ Water6,Liquid
 Flower,Noncollidable
 TNT,TNT
 Sand,Gravity
+Iron,Default
