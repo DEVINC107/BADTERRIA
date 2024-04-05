@@ -29,7 +29,7 @@ public class DroppedItemTracker {
         for (int i = droppedItems.size() - 1; i >= 0; i--) {
             DroppedItem item = droppedItems.get(i);
 
-            if (TUtility.getMagnitude(item.getPos(), Game.player.getBody().getPosition()) < 2) {
+            if (TUtility.getMagnitude(item.getPos(), Game.player.getBody().getPosition()) < 1.6) {
                 item.destroyItem();
             }
         }
