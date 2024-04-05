@@ -23,23 +23,20 @@ public class RenewableMob extends Entity{
         return respawn;
     }
 
-    public void update() {
-        super.update();
-        if (getHealth() <= 0) {
-            if (lastDied != null) {
-                lastDied = System.currentTimeMillis();
-                Game.world.destroyBody(getBody());
-            }
-        }
-        if (lastDied != null && System.currentTimeMillis() - lastDied > spawnsEvery) {
-            this.respawn = true;
-        }
-        if (lastDied == null) {
-            return;
-        }
+    public void respawn() {
+
     }
 
+    public void update() {
+        super.update();
+    }
+
+    @Override
     public void die() {
         super.die();
+        if (getHealth() <= 0) {
+            respawn();
+        }
+
     }
 }

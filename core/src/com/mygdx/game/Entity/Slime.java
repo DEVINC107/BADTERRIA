@@ -52,4 +52,9 @@ public class Slime extends RenewableMob {
         System.out.println("DEAD");
         super.die();
     }
+
+    @Override
+    public void respawn() {
+        new Slime("Pig");
+    }
 }
