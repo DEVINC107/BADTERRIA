@@ -121,9 +121,10 @@ public class Game extends ApplicationAdapter {
 				e2.collision(e1);
 			}
 		}
+		batch.end();
 
 		debugRenderer.render(world, camera.combined);
-		System.out.println(player.body.getPosition().y);
+
 		//block building
 		if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
 			Vector2 mousePos = TUtility.getCursor();
@@ -182,6 +183,8 @@ public class Game extends ApplicationAdapter {
 			}
 		}
 
+		DroppedItemTracker.pickUpSurroundingDroppedItems();
+		batch.begin();
 		DroppedItemTracker.renderDroppedItems();
 		batch.end();
 
